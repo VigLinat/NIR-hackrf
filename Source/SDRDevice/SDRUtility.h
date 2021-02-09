@@ -99,31 +99,4 @@ namespace HRFUtil {
 		uint32_t lna_gain = 8, vga_gain = 20, txvga_gain = 0;
 		uint32_t requested_mode_count = 0;
 	};
-
-	class HRFCmdParser 
-	{
-		static HRFUtil::HRFParams* ParseCommandLine(int argc, char** argv);
-	private:
-		static void usage();
-		static void CheckCorrectParams(HRFParams* params);
-		static uint32_t parse_u32(char* s);
-		static uint64_t parse_u64(char* s);
-		static int64_t parse_frequency_i64(char* optarg, char* endptr);
-		static uint32_t parse_frequency_u32(char* optarg, char* endptr);
-		static char* u64toa(uint64_t val, HRFUtil::t_u64toa* str);
-		static char* stringrev(char* str);
-	};
 }
-
-class SdrException
-{
-public:
-	SdrException() = default;
-	 
-	SdrException(const hackrf_error result);
-	
-	std::string What() const;
-
-private:
-	hackrf_error m_result;
-};

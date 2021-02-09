@@ -1,6 +1,6 @@
 #include "HRFDevice.h"
 #include <iostream>
-#include "SDRUtility.h"
+#include "../SDRException/SDRException.h"
 
 HRFDevice::HRFDevice()
 {
@@ -26,13 +26,13 @@ void HRFDevice::Init()
 
 	if ( result != HACKRF_SUCCESS )
 	{
-		throw SdrException((hackrf_error)result);
+		throw SDRException((hackrf_error)result);
 	}
 	
 	result = hackrf_open_by_serial(m_serialNumber, &m_hrfDevice);
 	if ( result != HACKRF_SUCCESS )
 	{
-		throw SdrException((hackrf_error)result);
+		throw SDRException((hackrf_error)result);
 	}
 }
 

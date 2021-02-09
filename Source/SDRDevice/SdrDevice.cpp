@@ -1,5 +1,5 @@
 #include "SdrDevice.h"
 
-SdrDevice::~SdrDevice()
+SDRDevice::~SDRDevice()
 {
 }

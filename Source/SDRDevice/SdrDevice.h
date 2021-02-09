@@ -2,10 +2,10 @@
 #include <string>
 #include "SDRUtility.h"
 
-class SdrDevice
+class SDRDevice
 {
 public:
-	virtual ~SdrDevice();
+	virtual ~SDRDevice();
 
 	// Send data from fileToSend with modulation mod
 	virtual void SendData(HRFUtil::MODULATIONS mod) = 0;

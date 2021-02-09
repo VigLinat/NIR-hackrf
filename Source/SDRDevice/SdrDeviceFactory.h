@@ -1,7 +1,7 @@
 
-class SdrDeviceFactory
+class SDRDeviceFactory
 {
 public:
-	SdrDeviceFactory();
-	~SdrDeviceFactory();
+	SDRDeviceFactory();
+	~SDRDeviceFactory();
 };

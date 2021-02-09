@@ -5,18 +5,12 @@
 
 #pragma comment(lib, "hackrf.lib")
 
-class SdrException;
-
 class HRFDevice :
-	public SdrDevice
+	public SDRDevice
 {
 public:
 	HRFDevice();
 	~HRFDevice();
-
-	enum ReceiveOrTransmit {
-		receive_wav = 0, receive, transmit
-	};
 
 	//send data from fileToSend using modulation mod
 	void SendData(HRFUtil::MODULATIONS mod);

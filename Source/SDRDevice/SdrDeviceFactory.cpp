@@ -1,12 +1,10 @@
 #include "SdrDeviceFactory.h"
 
-
-
-SdrDeviceFactory::SdrDeviceFactory()
+SDRDeviceFactory::SDRDeviceFactory()
 {
 }
 
 
-SdrDeviceFactory::~SdrDeviceFactory()
+SDRDeviceFactory::~SDRDeviceFactory()
 {
 }
