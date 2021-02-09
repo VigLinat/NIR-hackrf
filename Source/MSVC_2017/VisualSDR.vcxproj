@@ -131,18 +131,22 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\getopt\my_getopt.cpp" />
+    <ClCompile Include="..\HRFCmdParser\HRFCmdParser.cpp" />
     <ClCompile Include="..\SDRDevice\HRFDevice.cpp" />
     <ClCompile Include="..\SDRDevice\SdrDevice.cpp" />
     <ClCompile Include="..\SDRDevice\SdrDeviceFactory.cpp" />
     <ClCompile Include="..\SDRDevice\SDRUtility.cpp" />
+    <ClCompile Include="..\SDRException\SDRException.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\getopt\my_getopt.h" />
+    <ClInclude Include="..\HRFCmdParser\HRFCmdParser.h" />
     <ClInclude Include="..\SDRDevice\HRFDevice.h" />
     <ClInclude Include="..\SDRDevice\SdrDevice.h" />
     <ClInclude Include="..\SDRDevice\SdrDeviceFactory.h" />
     <ClInclude Include="..\SDRDevice\SDRUtility.h" />
+    <ClInclude Include="..\SDRException\SDRException.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

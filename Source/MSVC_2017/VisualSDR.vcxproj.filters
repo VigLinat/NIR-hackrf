@@ -33,6 +33,12 @@
     <ClCompile Include="..\getopt\my_getopt.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="..\HRFCmdParser\HRFCmdParser.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="..\SDRException\SDRException.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\SDRDevice\HRFDevice.h">
@@ -48,6 +54,12 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="..\getopt\my_getopt.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="..\HRFCmdParser\HRFCmdParser.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="..\SDRException\SDRException.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>

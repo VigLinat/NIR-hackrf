@@ -7,19 +7,20 @@
 #include <string>
 #include "../SDRDevice/SDRUtility.h"
 #include "../SDRDevice/HRFDevice.h"
+#include "../SDRException/SDRException.h"
 
 int main(int argc, char** argv)
 {
 	std::cerr << "Hello VisualSDR!\n";
 
-	SdrDevice* sdrDevice = new HRFDevice();
+	SDRDevice* sdrDevice = new HRFDevice();
 	std::wstring filepath = L"data.txt";
 
 	try
 	{
 		sdrDevice->Init();
 	}
-	catch (SdrException e)
+	catch (SDRException e)
 	{
 		std::cerr << e.What();
 	}

@@ -1,4 +1,4 @@
-#include "SDRException.h"
+#include "SdrException.h"
 #include "../SDRDevice/SDRUtility.h"
 
 SDRException::SDRException()
