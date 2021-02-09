@@ -27,7 +27,7 @@
 *.lib
 
 #Unkown MSVC stuff
-Soruce/MSVC_2017/.vs
+Source/MSVC_2017/.vs
 
 # Executables
 Source/MSVC_2017/x64
