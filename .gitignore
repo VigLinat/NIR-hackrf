@@ -26,12 +26,17 @@
 *.a
 *.lib
 
+#Unkown MSVC stuff
+Soruce/MSVC_2017/.vs
+
 # Executables
+Source/MSVC_2017/x64
 *.exe
 *.out
 *.app
 
 #temp files
+data.txt
 Temp
 temp
 tmp
