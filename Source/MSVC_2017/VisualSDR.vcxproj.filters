@@ -27,9 +27,6 @@
     <ClCompile Include="..\SDRDevice\SdrDevice.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="..\SDRDevice\SDRUtility.cpp">
-      <Filter>Исходные файлы</Filter>
-    </ClCompile>
     <ClCompile Include="..\getopt\my_getopt.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
@@ -39,6 +36,15 @@
     <ClCompile Include="..\SDRException\SDRException.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="..\SDRUtility\SDRUtility.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="..\SDRTransceiver\HRFTransceiver.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="..\SDRTransceiver\SDRTransceiver.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\SDRDevice\HRFDevice.h">
@@ -46,9 +52,6 @@
     </ClInclude>
     <ClInclude Include="..\SDRDevice\SdrDeviceFactory.h">
       <Filter>Файлы заголовков</Filter>
-    </ClInclude>
-    <ClInclude Include="..\SDRDevice\SDRUtility.h">
-      <Filter>Исходные файлы</Filter>
     </ClInclude>
     <ClInclude Include="..\SDRDevice\SdrDevice.h">
       <Filter>Файлы заголовков</Filter>
@@ -60,6 +63,15 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="..\SDRException\SDRException.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="..\SDRUtility\SDRUtility.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="..\SDRTransceiver\HRFTransceiver.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="..\SDRTransceiver\SDRTransceiver.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>

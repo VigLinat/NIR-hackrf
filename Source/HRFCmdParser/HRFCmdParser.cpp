@@ -1,12 +1,12 @@
-#include "../SDRDevice/SDRUtility.h"
 #include "HRFCmdParser.h"
+#include "../SDRUtility/SDRUtility.h"
 #include "../getopt/my_getopt.h"
 #include "../SDRException/SDRException.h"
 
-HRFUtil::HRFParams* HRFCmdParser::ParseCommandLine(int argc, char** argv)
+HRFUtil::HRFParams HRFCmdParser::ParseCommandLine(int argc, char** argv)
 {
 	int opt;
-	HRFUtil::HRFParams* params = new HRFUtil::HRFParams;
+	HRFUtil::HRFParams params;
 	char* endptr = NULL;
 	while ((opt = my_getopt(argc, argv)) != EOF)
 	{
@@ -14,121 +14,121 @@ HRFUtil::HRFParams* HRFCmdParser::ParseCommandLine(int argc, char** argv)
 		switch (opt)
 		{
 		case 'H':
-			params->hw_sync = true;
-			params->hw_sync_enable = parse_u32(optarg);
+			params.hw_sync = true;
+			params.hw_sync_enable = parse_u32(optarg);
 			break;
 		case 'w':
-			params->receive_wav = true;
-			params->requested_mode_count++;
+			params.receive_wav = true;
+			params.requested_mode_count++;
 			break;
 
 		case 'r':
-			params->receive = true;
-			params->requested_mode_count++;
+			params.receive = true;
+			params.requested_mode_count++;
 			break;
 
 		case 't':
-			params->transmit = true;
-			params->requested_mode_count++;
+			params.transmit = true;
+			params.requested_mode_count++;
 			break;
 
 		case 'd':
-			params->serial_number = optarg;
+			params.serial_number = optarg;
 			break;
 
 		case 'S':
-			params->stream_size = parse_u64(optarg);
-			params->stream_buf = (uint8_t*)calloc(1, params->stream_size);
+			params.stream_size = parse_u64(optarg);
+			params.stream_buf = (uint8_t*)calloc(1, params.stream_size);
 			break;
 
 		case 'f':
-			params->freq_hz = parse_frequency_i64(optarg, endptr);
-			params->automatic_tuning = true;
+			params.freq_hz = parse_frequency_i64(optarg, endptr);
+			params.automatic_tuning = true;
 			break;
 
 		case 'i':
-			params->if_freq_hz = parse_frequency_i64(optarg, endptr);
-			params->if_freq = true;
+			params.if_freq_hz = parse_frequency_i64(optarg, endptr);
+			params.if_freq = true;
 			break;
 
 		case 'o':
-			params->lo_freq_hz = parse_frequency_i64(optarg, endptr);
-			params->lo_freq = true;
+			params.lo_freq_hz = parse_frequency_i64(optarg, endptr);
+			params.lo_freq = true;
 			break;
 
 		case 'm':
-			params->image_reject = true;
-			params->image_reject_selection = parse_u32(optarg);
+			params.image_reject = true;
+			params.image_reject_selection = parse_u32(optarg);
 			break;
 
 		case 'a':
-			params->amp = true;
-			params->amp_enable = parse_u32(optarg);
+			params.amp = true;
+			params.amp_enable = parse_u32(optarg);
 			break;
 
 		case 'p':
-			params->antenna = true;
-			params->antenna_enable = parse_u32(optarg);
+			params.antenna = true;
+			params.antenna_enable = parse_u32(optarg);
 			break;
 
 		case 'l':
-			params->lna_gain = parse_u32(optarg);
+			params.lna_gain = parse_u32(optarg);
 			break;
 
 		case 'g':
-			params->vga_gain = parse_u32(optarg);
+			params.vga_gain = parse_u32(optarg);
 			break;
 
 		case 'x':
-			params->txvga_gain = parse_u32(optarg);
+			params.txvga_gain = parse_u32(optarg);
 			break;
 
 		case 's':
-			params->sample_rate_hz = parse_frequency_u32(optarg, endptr);
-			params->sample_rate = true;
+			params.sample_rate_hz = parse_frequency_u32(optarg, endptr);
+			params.sample_rate = true;
 			break;
 
 		case 'n':
-			params->limit_num_samples = true;
-			params->samples_to_xfer = parse_u64(optarg);
-			params->bytes_to_xfer = params->samples_to_xfer * 2ull;
+			params.limit_num_samples = true;
+			params.samples_to_xfer = parse_u64(optarg);
+			params.bytes_to_xfer = params.samples_to_xfer * 2ull;
 			break;
 
 		case 'b':
-			params->baseband_filter_bw_hz = parse_frequency_u32(optarg, endptr);
-			params->baseband_filter_bw = true;
+			params.baseband_filter_bw_hz = parse_frequency_u32(optarg, endptr);
+			params.baseband_filter_bw = true;
 			break;
 
 		case 'c':
-			params->signalsource = true;
-			params->requested_mode_count++;
-			params->amplitude = parse_u32(optarg);
+			params.signalsource = true;
+			params.requested_mode_count++;
+			params.amplitude = parse_u32(optarg);
 			break;
 
 		case 'R':
-			params->repeat = true;
+			params.repeat = true;
 			break;
 
 		case 'C':
-			params->crystal_correct = true;
-			params->crystal_correct_ppm = parse_u32(optarg);
+			params.crystal_correct = true;
+			params.crystal_correct_ppm = parse_u32(optarg);
 			break;
 
 		case 'h':
 		case '?':
 			usage();
-			throw SDRException();// "EXIT_SUCCESS
+			throw SDRException((hackrf_error)EXIT_SUCCESS);// "EXIT_SUCCESS
 
 		default:
 			fprintf(stderr, "unknown argument '-%c %s'\n", opt, optarg);
 			usage();
-			throw SDRException(); // EXIT_FAILURE;
+			throw SDRException((hackrf_error)EXIT_FAILURE); // EXIT_FAILURE;
 		}
 
 		if (result != HACKRF_SUCCESS) {
 			fprintf(stderr, "argument error: '-%c %s' %s (%d)\n", opt, optarg, hackrf_error_name((hackrf_error)result), result);
 			usage();
-			throw SDRException();// return EXIT_FAILURE;
+			throw SDRException((hackrf_error)EXIT_FAILURE);// return EXIT_FAILURE;
 		}
 	}
 
@@ -137,157 +137,176 @@ HRFUtil::HRFParams* HRFCmdParser::ParseCommandLine(int argc, char** argv)
 	return params;
 }
 
-void HRFCmdParser::CheckCorrectParams(HRFUtil::HRFParams* params)
+void HRFCmdParser::CheckCorrectParams(HRFUtil::HRFParams& params)
 {
 	HRFUtil::t_u64toa ascii_u64_data1;
 	HRFUtil::t_u64toa ascii_u64_data2;
 
-	if (params->lna_gain % 8)
+	if (params.lna_gain % 8)
 		fprintf(stderr, "warning: lna_gain (-l) must be a multiple of 8\n");
 
-	if (params->vga_gain % 2)
+	if (params.vga_gain % 2)
 		fprintf(stderr, "warning: vga_gain (-g) must be a multiple of 2\n");
 
-	if (params->samples_to_xfer >= SAMPLES_TO_XFER_MAX) {
+	if (params.samples_to_xfer >= SAMPLES_TO_XFER_MAX) 
+	{
 		fprintf(stderr, "argument error: num_samples must be less than %s/%sMio\n",
 			u64toa(SAMPLES_TO_XFER_MAX, &ascii_u64_data1),
 			u64toa((SAMPLES_TO_XFER_MAX / FREQ_ONE_MHZ), &ascii_u64_data2));
 		usage();
-		throw SDRException();// return EXIT_FAILURE;
+		throw SDRException((hackrf_error)EXIT_FAILURE);// return EXIT_FAILURE;
 	}
 
-	if (params->if_freq || params->lo_freq || params->image_reject) {
+	if (params.if_freq || params.lo_freq || params.image_reject) 
+	{
 		/* explicit tuning selected */
-		if (!params->if_freq) {
+		if (!params.if_freq) 
+		{
 			fprintf(stderr, "argument error: if_freq_hz must be specified for explicit tuning.\n");
 			usage();
-			throw SDRException();// return EXIT_FAILURE;
+			throw SDRException((hackrf_error)EXIT_FAILURE);// return EXIT_FAILURE;
 		}
-		if (!params->image_reject) {
+		if (!params.image_reject) 
+		{
 			fprintf(stderr, "argument error: image_reject must be specified for explicit tuning.\n");
 			usage();
-			throw SDRException();// return EXIT_FAILURE;
+			throw SDRException((hackrf_error)EXIT_FAILURE);// return EXIT_FAILURE;
 		}
-		if (!params->lo_freq && (params->image_reject_selection != RF_PATH_FILTER_BYPASS)) {
+		if (!params.lo_freq && (params.image_reject_selection != RF_PATH_FILTER_BYPASS)) 
+		{
 			fprintf(stderr, "argument error: lo_freq_hz must be specified for explicit tuning unless image_reject is set to bypass.\n");
 			usage();
-			throw SDRException();// return EXIT_FAILURE;
+			throw SDRException((hackrf_error)EXIT_FAILURE);// return EXIT_FAILURE;
 		}
-		if ((params->if_freq_hz > IF_MAX_HZ) || (params->if_freq_hz < IF_MIN_HZ)) {
+		if ((params.if_freq_hz > IF_MAX_HZ) || (params.if_freq_hz < IF_MIN_HZ)) 
+		{
 			fprintf(stderr, "argument error: if_freq_hz shall be between %s and %s.\n",
 				u64toa(IF_MIN_HZ, &ascii_u64_data1),
 				u64toa(IF_MAX_HZ, &ascii_u64_data2));
 			usage();
-			throw SDRException();// return EXIT_FAILURE;
+			throw SDRException((hackrf_error)EXIT_FAILURE);// return EXIT_FAILURE;
 		}
-		if ((params->lo_freq_hz > LO_MAX_HZ) || (params->lo_freq_hz < LO_MIN_HZ)) {
+		if ((params.lo_freq_hz > LO_MAX_HZ) || (params.lo_freq_hz < LO_MIN_HZ)) 
+		{
 			fprintf(stderr, "argument error: lo_freq_hz shall be between %s and %s.\n",
 				u64toa(LO_MIN_HZ, &ascii_u64_data1),
 				u64toa(LO_MAX_HZ, &ascii_u64_data2));
 			usage();
-			throw SDRException();// return EXIT_FAILURE;
+			throw SDRException((hackrf_error)EXIT_FAILURE);// return EXIT_FAILURE;
 		}
-		if (params->image_reject_selection > 2) {
+		if (params.image_reject_selection > 2) 
+		{
 			fprintf(stderr, "argument error: image_reject must be 0, 1, or 2 .\n");
 			usage();
-			throw SDRException();// return EXIT_FAILURE;
+			throw SDRException((hackrf_error)EXIT_FAILURE);// return EXIT_FAILURE;
 		}
-		if (params->automatic_tuning) {
+		if (params.automatic_tuning) 
+		{
 			fprintf(stderr, "warning: freq_hz ignored by explicit tuning selection.\n");
-			params->automatic_tuning = false;
+			params.automatic_tuning = false;
 		}
-		switch (params->image_reject_selection) {
+		switch (params.image_reject_selection) 
+		{
 		case RF_PATH_FILTER_BYPASS:
-			params->freq_hz = params->if_freq_hz;
+			params.freq_hz = params.if_freq_hz;
 			break;
 		case RF_PATH_FILTER_LOW_PASS:
-			params->freq_hz = (int64_t)labs((long int)(params->if_freq_hz - params->lo_freq_hz));
+			params.freq_hz = (int64_t)labs((long int)(params.if_freq_hz - params.lo_freq_hz));
 			break;
 		case RF_PATH_FILTER_HIGH_PASS:
-			params->freq_hz = params->if_freq_hz + params->lo_freq_hz;
+			params.freq_hz = params.if_freq_hz + params.lo_freq_hz;
 			break;
 		default:
-			params->freq_hz = DEFAULT_FREQ_HZ;
+			params.freq_hz = DEFAULT_FREQ_HZ;
 			break;
 		}
 		fprintf(stderr, "explicit tuning specified for %s Hz.\n",
-			u64toa(params->freq_hz, &ascii_u64_data1));
+			u64toa(params.freq_hz, &ascii_u64_data1));
 
 	}
-	else if (params->automatic_tuning) {
-		if (params->freq_hz > FREQ_MAX_HZ)
+	else if (params.automatic_tuning) 
+	{
+		if (params.freq_hz > FREQ_MAX_HZ)
 		{
 			fprintf(stderr, "argument error: freq_hz shall be between %s and %s.\n",
 				u64toa(FREQ_MIN_HZ, &ascii_u64_data1),
 				u64toa(FREQ_MAX_HZ, &ascii_u64_data2));
 			usage();
-			throw SDRException();// return EXIT_FAILURE;
+			throw SDRException((hackrf_error)EXIT_FAILURE);// return EXIT_FAILURE;
 		}
 	}
 	else {
 		/* Use default freq */
-		params->freq_hz = DEFAULT_FREQ_HZ;
-		params->automatic_tuning = true;
+		params.freq_hz = DEFAULT_FREQ_HZ;
+		params.automatic_tuning = true;
 	}
 
-	if (params->amp) {
-		if (params->amp_enable > 1)
+	if (params.amp) 
+	{
+		if (params.amp_enable > 1)
 		{
 			fprintf(stderr, "argument error: amp_enable shall be 0 or 1.\n");
 			usage();
-			throw SDRException();// return EXIT_FAILURE;
+			throw SDRException((hackrf_error)EXIT_FAILURE);// return EXIT_FAILURE;
 		}
 	}
 
-	if (params->antenna) {
-		if (params->antenna_enable > 1) {
+	if (params.antenna) 
+	{
+		if (params.antenna_enable > 1) 
+		{
 			fprintf(stderr, "argument error: antenna_enable shall be 0 or 1.\n");
 			usage();
-			throw SDRException();// return EXIT_FAILURE;
+			throw SDRException((hackrf_error)EXIT_FAILURE);// return EXIT_FAILURE;
 		}
 	}
 
-	if (params->sample_rate == false)
+	if (params.sample_rate == false)
 	{
-		params->sample_rate_hz = DEFAULT_SAMPLE_RATE_HZ;
+		params.sample_rate_hz = DEFAULT_SAMPLE_RATE_HZ;
 	}
 
-	if (params->baseband_filter_bw)
+	if (params.baseband_filter_bw)
 	{
-		if (params->baseband_filter_bw_hz > BASEBAND_FILTER_BW_MAX) {
+		if (params.baseband_filter_bw_hz > BASEBAND_FILTER_BW_MAX) 
+		{
 			fprintf(stderr, "argument error: baseband_filter_bw_hz must be less or equal to %u Hz/%.03f MHz\n",
 				BASEBAND_FILTER_BW_MAX, (float)(BASEBAND_FILTER_BW_MAX / FREQ_ONE_MHZ));
 			usage();
-			throw SDRException();// return EXIT_FAILURE;
+			throw SDRException((hackrf_error)EXIT_FAILURE);// return EXIT_FAILURE;
 		}
 
-		if (params->baseband_filter_bw_hz < BASEBAND_FILTER_BW_MIN) {
+		if (params.baseband_filter_bw_hz < BASEBAND_FILTER_BW_MIN) 
+		{
 			fprintf(stderr, "argument error: baseband_filter_bw_hz must be greater or equal to %u Hz/%.03f MHz\n",
 				BASEBAND_FILTER_BW_MIN, (float)(BASEBAND_FILTER_BW_MIN / FREQ_ONE_MHZ));
 			usage();
-			throw SDRException();// return EXIT_FAILURE;
+			throw SDRException((hackrf_error)EXIT_FAILURE);// return EXIT_FAILURE;
 		}
 
 		/* Compute nearest freq for bw filter */
-		params->baseband_filter_bw_hz = hackrf_compute_baseband_filter_bw(params->baseband_filter_bw_hz);
+		params.baseband_filter_bw_hz = hackrf_compute_baseband_filter_bw(params.baseband_filter_bw_hz);
 	}
 
-	if (params->requested_mode_count > 1) {
+	if (params.requested_mode_count > 1) 
+	{
 		fprintf(stderr, "specify only one of: -t, -c, -r, -w\n");
 		usage();
-		throw SDRException();// return EXIT_FAILURE;
+		throw SDRException((hackrf_error)EXIT_FAILURE);// return EXIT_FAILURE;
 	}
 
-	if (params->requested_mode_count < 1) {
+	if (params.requested_mode_count < 1) 
+	{
 		fprintf(stderr, "specify one of: -t, -c, -r, -w\n");
 		usage();
-		throw SDRException();// return EXIT_FAILURE;
+		throw SDRException((hackrf_error)EXIT_FAILURE);// return EXIT_FAILURE;
 	}
 
-	if (params->crystal_correct) {
-		params->sample_rate_hz = (uint32_t)((double)
-			params->sample_rate_hz * (1000000 - params->crystal_correct_ppm) / 1000000 + 0.5);
-		params->freq_hz = params->freq_hz * (1000000 - params->crystal_correct_ppm) / 1000000;
+	if (params.crystal_correct) 
+	{
+		params.sample_rate_hz = (uint32_t)((double)
+			params.sample_rate_hz * (1000000 - params.crystal_correct_ppm) / 1000000 + 0.5);
+		params.freq_hz = params.freq_hz * (1000000 - params.crystal_correct_ppm) / 1000000;
 	}
 }
 

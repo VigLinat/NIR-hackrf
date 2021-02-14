@@ -1,11 +1,12 @@
-#include "../SDRDevice/SDRUtility.h"
+#include "../SDRUtility/SDRUtility.h"
 
 class HRFCmdParser
 {
-	static HRFUtil::HRFParams* ParseCommandLine(int argc, char** argv);
+public:
+	static HRFUtil::HRFParams ParseCommandLine(int argc, char** argv);
 private:
 	static void usage();
-	static void CheckCorrectParams(HRFUtil::HRFParams* params);
+	static void CheckCorrectParams(HRFUtil::HRFParams& params);
 	static uint32_t parse_u32(char* s);
 	static uint64_t parse_u64(char* s);
 	static int64_t parse_frequency_i64(char* optarg, char* endptr);

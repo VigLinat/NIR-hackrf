@@ -1,5 +1,5 @@
 #include "SDRException.h"
-#include "../SDRDevice/SDRUtility.h"
+#include "../SDRUtility/SDRUtility.h"
 
 SDRException::SDRException()
 {
@@ -13,5 +13,5 @@ SDRException::SDRException(const hackrf_error result)
 
 std::string SDRException::What() const
 {
-	return "hackrf failed: " + std::string(hackrf_error_name(m_result));
+	return std::string(hackrf_error_name(m_result));
 }

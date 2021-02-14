@@ -92,6 +92,7 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <PreprocessorDefinitions>WIN32;_WINDOWS;_CRT_SECURE_NO_WARNINGS;TOOL_RELEASE="git-52851ee";CMAKE_INTDIR="Debug";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <BuildLog>
       <Path>$(IntDir)\$(MSBuildProjectName).log</Path>
@@ -120,6 +121,7 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_CRT_SECURE_NO_WARNINGS;TOOL_RELEASE="git-52851ee";CMAKE_INTDIR="Release";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -135,8 +137,10 @@
     <ClCompile Include="..\SDRDevice\HRFDevice.cpp" />
     <ClCompile Include="..\SDRDevice\SdrDevice.cpp" />
     <ClCompile Include="..\SDRDevice\SdrDeviceFactory.cpp" />
-    <ClCompile Include="..\SDRDevice\SDRUtility.cpp" />
     <ClCompile Include="..\SDRException\SDRException.cpp" />
+    <ClCompile Include="..\SDRTransceiver\HRFTransceiver.cpp" />
+    <ClCompile Include="..\SDRTransceiver\SDRTransceiver.cpp" />
+    <ClCompile Include="..\SDRUtility\SDRUtility.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -145,8 +149,10 @@
     <ClInclude Include="..\SDRDevice\HRFDevice.h" />
     <ClInclude Include="..\SDRDevice\SdrDevice.h" />
     <ClInclude Include="..\SDRDevice\SdrDeviceFactory.h" />
-    <ClInclude Include="..\SDRDevice\SDRUtility.h" />
     <ClInclude Include="..\SDRException\SDRException.h" />
+    <ClInclude Include="..\SDRTransceiver\HRFTransceiver.h" />
+    <ClInclude Include="..\SDRTransceiver\SDRTransceiver.h" />
+    <ClInclude Include="..\SDRUtility\SDRUtility.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

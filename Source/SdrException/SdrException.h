@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include "../SDRUtility/SDRUtility.h"
 
 class SDRException
 {
@@ -8,7 +9,7 @@ public:
 	 
 	SDRException(const hackrf_error result);
 	
-	std::string What() const;
+	virtual std::string What() const;
 
 private:
 	hackrf_error m_result;
