@@ -25,14 +25,14 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
 
 #include <stdlib.h>
 #include <string.h>
-#include <libusb.h>
+#include "libusb.h"
 
 #ifdef _WIN32
 /* Avoid redefinition of timespec from time.h (included by libusb.h) */
 #define HAVE_STRUCT_TIMESPEC 1
 #define strdup _strdup
 #endif
-#include <pthread.h>
+#include "pthread.h"
 
 #ifndef bool
 typedef int bool;
@@ -1304,7 +1304,6 @@ int ADDCALL hackrf_set_sample_rate(hackrf_device* device, const double freq)
 
 	freq_hz = (uint32_t)(freq * i + 0.5);
 	divider = i;
-
 	return hackrf_set_sample_rate_manual(device, freq_hz, divider);
 }
 

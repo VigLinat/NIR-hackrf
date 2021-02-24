@@ -15,7 +15,7 @@ int main(int argc, char** argv)
 	std::cerr << "Hello VisualSDR!\n";
 
 	SDRDevice* sdrDevice = new HRFDevice();
-	std::wstring filepath = L"data.txt";
+	std::wstring filepath = L"tosend";
 
 	HRFUtil::HRFParams cmdLineParams;
 	try

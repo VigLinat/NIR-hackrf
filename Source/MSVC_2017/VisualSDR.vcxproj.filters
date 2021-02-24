@@ -45,6 +45,9 @@
     <ClCompile Include="..\SDRTransceiver\SDRTransceiver.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="..\hackrf\hackrf.c">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\SDRDevice\HRFDevice.h">
@@ -72,6 +75,9 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="..\SDRTransceiver\SDRTransceiver.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="..\hackrf\hackrf.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>

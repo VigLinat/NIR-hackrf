@@ -14,6 +14,7 @@ public:
 
 
 private:
+	void EnableParamsForRXTX(hackrf_device* device);
     static int tx_callback(hackrf_transfer* transfer);
     inline static  std::shared_ptr<HRFUtil::HRFParams> m_params;
     inline static std::ifstream m_fileToSend;

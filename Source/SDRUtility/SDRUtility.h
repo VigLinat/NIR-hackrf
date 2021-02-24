@@ -1,6 +1,11 @@
 #pragma once
+#include <Windows.h>
+#include <time.h>
 #include <iostream>
 #include "../hackrf/hackrf.h"
+
+#pragma comment (lib, "libusb-1.0.lib")
+#pragma comment (lib, "pthreadVC2.lib")
 
 namespace HRFUtil {
 
@@ -9,6 +14,12 @@ namespace HRFUtil {
 		VSDR_MODULATION_PSK_4,
 		VSDR_MODULATION_QAM_8,
 		VSDR_MODULATION_QAM_16
+	};
+
+	enum rf_path_filter {
+		RF_PATH_FILTER_BYPASS = 0,
+		RF_PATH_FILTER_LOW_PASS = 1,
+		RF_PATH_FILTER_HIGH_PASS = 2,
 	};
 
 	#define FD_BUFFER_SIZE (8*1024)
@@ -42,6 +53,8 @@ namespace HRFUtil {
 	{
 		char data[U64TOA_MAX_DIGIT + 1];
 	} t_u64toa;
+
+	
 
 	struct HRFParams
 	{
