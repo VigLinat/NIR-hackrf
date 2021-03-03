@@ -30,6 +30,7 @@ HRFUtil::HRFParams HRFCmdParser::ParseCommandLine(int argc, char** argv)
 		case 't':
 			params.transmit = true;
 			params.requested_mode_count++;
+			params.filepath = optarg;
 			break;
 
 		case 'd':

@@ -1,5 +1,6 @@
+#pragma once
 #include "../SDRUtility/SDRUtility.h"
-
+#include <string>
 class HRFCmdParser
 {
 public:

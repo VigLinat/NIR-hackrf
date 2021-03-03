@@ -14,6 +14,4 @@ public:
 	virtual void Init() = 0;
 
 	virtual void SetCmdLineParams(const HRFUtil::HRFParams& params) = 0;
-
-	virtual void SetFilename(const std::wstring& filename) = 0;
 };

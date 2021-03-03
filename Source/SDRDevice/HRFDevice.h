@@ -20,13 +20,11 @@ public:
 
 	void SetCmdLineParams(const HRFUtil::HRFParams& params);
 
-	void SetFilename(const std::wstring& filename);
-
 	void OnExit();
 private:
 	HRFTransceiver m_transceiver;
 
-	std::wstring m_filename;
+	std::string m_filename;
 	hackrf_device* m_device;
 
 	std::shared_ptr<HRFUtil::HRFParams> m_params;

@@ -111,5 +111,7 @@ namespace HRFUtil {
 
 		uint32_t lna_gain = 8, vga_gain = 20, txvga_gain = 0;
 		uint32_t requested_mode_count = 0;
+
+		const char* filepath;
 	};
 }

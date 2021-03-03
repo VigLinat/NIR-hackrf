@@ -71,17 +71,14 @@ void HRFDevice::Init()
 		throw SDRException((hackrf_error)result);
 	}
 
-	m_transceiver = HRFTransceiver(m_params, m_filename);
-}
-
-void HRFDevice::SetFilename(const std::wstring& filename)
-{
-	m_filename = filename;
+	m_transceiver = HRFTransceiver(m_params, m_params->filepath);
 }
 
 void HRFDevice::SetCmdLineParams(const HRFUtil::HRFParams& params)
 {
 	m_params = std::make_shared<HRFUtil::HRFParams>(params);
+	m_filename = m_params->filepath;
+	std::cout << "path to file: " << m_params->filepath << std::endl;
 }
 
 void HRFDevice::OnExit()
