@@ -54,7 +54,6 @@ HRFTransceiver::HRFTransceiver()
 HRFTransceiver::HRFTransceiver(const std::shared_ptr<HRFUtil::HRFParams> params, const std::string filename)
 {
 	m_params = params;
-
 	if (!m_fileToSend.is_open()) 
 	{
 		m_fileToSend = std::ifstream();
@@ -186,6 +185,14 @@ int HRFTransceiver::tx_callback(hackrf_transfer* transfer)
 	}
 }
 
+void HRFTransceiver::test(uint8_t* buffer, size_t buffer_size)
+{
+	for (int i = 0; i < buffer_size; i++)
+	{
+		buffer[i] = i % 255;
+	}
+}
+
 void HRFTransceiver::make_psk4_buffer(uint8_t* buffer, char* data, size_t size)
 {
 	for (int i = 0; i < size; i++)
@@ -193,28 +200,12 @@ void HRFTransceiver::make_psk4_buffer(uint8_t* buffer, char* data, size_t size)
 		uint8_t modulation_symbol;
 		for (int j = 7; j >= 0; j--)
 		{
-			modulation_symbol = (data[i] & (1 << j)) != 0 ? 127 : -128;
+			modulation_symbol = (data[i] & (1 << j)) != 0 ? 127 : 0;
 			buffer[i * 8 + (7 - j)] = modulation_symbol;
 		}
 	}
 }
 
-void HRFTransceiver::make_psk2_buffer(uint8_t* buffer, char* data, size_t size)
-{
-	// for bpsk, buffer should be x2 in size and every odd bit should be equal 1 (127, I = const)
-	// and every even bit should be modulated (Q = Q(t))
-	
-	// for bpsk, code below is invalid
-	/*memset(buffer, 127, size);
-	for (int i = 0; i < size; i++)
-	{
-		for (int j = 7; j >= 0; j--)
-		{
-			uint8_t modulation_symbol = (data[i] & (1 << j)) != 0 ? 127 : -128;
-			buffer[i * 8 + j] = modulation_symbol;
-		}
-	}*/
-}
 void HRFTransceiver::EnableParamsForRXTX(hackrf_device* device)
 {
 
