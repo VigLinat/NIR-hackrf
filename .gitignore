@@ -35,6 +35,9 @@ Source/MSVC_2017/x64
 *.out
 *.app
 
+# Debug 
+*.pdb
+
 #temp files
 data.txt
 Temp
