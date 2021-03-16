@@ -34,4 +34,3 @@ int main(int argc, char** argv)
 	sdrDevice = nullptr;
 	return 0;
 }
-
