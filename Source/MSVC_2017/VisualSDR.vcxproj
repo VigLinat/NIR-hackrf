@@ -41,13 +41,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
-    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
@@ -93,11 +93,14 @@
       <ConformanceMode>true</ConformanceMode>
       <PreprocessorDefinitions>WIN32;_WINDOWS;_CRT_SECURE_NO_WARNINGS;TOOL_RELEASE="git-52851ee";CMAKE_INTDIR="Debug";%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>C:\Users\prohorov.vs\c-cpp_libs\pthreads-w32-2-9-1-release\Pre-built.2\include;C:\Users\prohorov.vs\c-cpp_libs\libusb\libusb;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\vladi\C-Cpp_libs\wxWidgets-3.1.4\include\msvc;C:\Users\vladi\C-Cpp_libs\wxWidgets-3.1.4\include;C:\Users\prohorov.vs\c-cpp_libs\pthreads-w32-2-9-1-release\Pre-built.2\include;C:\Users\prohorov.vs\c-cpp_libs\libusb\libusb;C:\Users\vladi\C-Cpp_libs\libusb\libusb;C:\Users\vladi\C-Cpp_libs\pthreads-w32-2-9-1-release\Pre-built.2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <BuildLog>
       <Path>$(IntDir)\$(MSBuildProjectName).log</Path>
     </BuildLog>
+    <Link>
+      <AdditionalLibraryDirectories>C:\Users\vladi\C-Cpp_libs\wxWidgets-3.1.4\lib\vc_x64_lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -123,11 +126,13 @@
       <ConformanceMode>true</ConformanceMode>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_CRT_SECURE_NO_WARNINGS;TOOL_RELEASE="git-52851ee";CMAKE_INTDIR="Release";%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>C:\Users\prohorov.vs\c-cpp_libs\pthreads-w32-2-9-1-release\Pre-built.2\include;C:\Users\prohorov.vs\c-cpp_libs\libusb\libusb;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\vladi\C-Cpp_libs\wxWidgets-3.1.4\include\msvc;C:\Users\vladi\C-Cpp_libs\wxWidgets-3.1.4\include;C:\Users\prohorov.vs\c-cpp_libs\pthreads-w32-2-9-1-release\Pre-built.2\include;C:\Users\prohorov.vs\c-cpp_libs\libusb\libusb;C:\Users\vladi\C-Cpp_libs\pthreads-w32-2-9-1-release\Pre-built.2\include;C:\Users\vladi\C-Cpp_libs\libusb\libusb;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>C:\Users\vladi\C-Cpp_libs\wxWidgets-3.1.4\lib\vc_x64_lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <SubSystem>NotSet</SubSystem>
     </Link>
     <BuildLog>
       <Path>$(IntDir)\$(MSBuildProjectName).log</Path>
@@ -135,6 +140,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\getopt\my_getopt.cpp" />
+    <ClCompile Include="..\GUI\Frame.cpp" />
+    <ClCompile Include="..\GUI\MyApp.cpp" />
     <ClCompile Include="..\hackrf\hackrf.c" />
     <ClCompile Include="..\HRFCmdParser\HRFCmdParser.cpp" />
     <ClCompile Include="..\SDRDevice\HRFDevice.cpp" />
@@ -148,6 +155,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\getopt\my_getopt.h" />
+    <ClInclude Include="..\GUI\Frame.h" />
+    <ClInclude Include="..\GUI\MyApp.h" />
     <ClInclude Include="..\hackrf\hackrf.h" />
     <ClInclude Include="..\HRFCmdParser\HRFCmdParser.h" />
     <ClInclude Include="..\SDRDevice\HRFDevice.h" />
