@@ -51,7 +51,7 @@
     <ClCompile Include="..\GUI\MyApp.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="..\GUI\Frame.cpp">
+    <ClCompile Include="..\GUI\ParamsFrame.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>
@@ -89,7 +89,10 @@
     <ClInclude Include="..\GUI\MyApp.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="..\GUI\Frame.h">
+    <ClInclude Include="resource.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="..\GUI\ParamsFrame.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>

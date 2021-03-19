@@ -1,15 +1,6 @@
-#include "Frame.h"
-#include <iostream>
-#include <string>
-Frame::Frame()
-	: wxFrame(NULL, wxID_ANY, "Hello World", wxPoint(30, 30), wxSize(800, 600))
-{
-	CreateButtons();
-	CreateRadioButtons();
-	CreateTexts();
-}
+#include "FrameContent.h"
 
-void Frame::CreateButtons()
+void FrameContent::CreateButtons()
 {
 	wxSize btn_size = wxSize(button_width, button_height);
 
@@ -39,12 +30,12 @@ void Frame::CreateButtons()
 	}
 }
 
-void Frame::CreateRadioButtons()
+void FrameContent::CreateRadioButtons()
 {
 
 }
 
-void Frame::CreateTexts()
+void FrameContent::CreateTexts()
 {
 	text_list.push_back(
 		new wxTextCtrl(this, ID_SETFILE, "", wxPoint(10, 70), wxSize(300, 30))
@@ -67,14 +58,14 @@ void Frame::CreateTexts()
 	);
 }
 
-void Frame::OnButtonClicked(wxCommandEvent& evt)
+void FrameContent::OnButtonClicked(wxCommandEvent& evt)
 {
 	int id = evt.GetId();
 	wxTextCtrl* textBox = nullptr;
 
 	for (auto it = text_list.begin(); it != text_list.end(); it++)
 	{
-		if ((*it)->GetId() == id) 
+		if ((*it)->GetId() == id)
 		{
 			textBox = *it;
 			break;

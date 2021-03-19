@@ -140,7 +140,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\getopt\my_getopt.cpp" />
-    <ClCompile Include="..\GUI\Frame.cpp" />
+    <ClCompile Include="..\GUI\ParamsFrame.cpp" />
     <ClCompile Include="..\GUI\MyApp.cpp" />
     <ClCompile Include="..\hackrf\hackrf.c" />
     <ClCompile Include="..\HRFCmdParser\HRFCmdParser.cpp" />
@@ -155,7 +155,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\getopt\my_getopt.h" />
-    <ClInclude Include="..\GUI\Frame.h" />
+    <ClInclude Include="..\GUI\ParamsFrame.h" />
     <ClInclude Include="..\GUI\MyApp.h" />
     <ClInclude Include="..\hackrf\hackrf.h" />
     <ClInclude Include="..\HRFCmdParser\HRFCmdParser.h" />
@@ -166,6 +166,7 @@
     <ClInclude Include="..\SDRTransceiver\HRFTransceiver.h" />
     <ClInclude Include="..\SDRTransceiver\SDRTransceiver.h" />
     <ClInclude Include="..\SDRUtility\SDRUtility.h" />
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

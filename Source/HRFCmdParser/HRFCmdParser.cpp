@@ -3,6 +3,19 @@
 #include "../getopt/my_getopt.h"
 #include "../SDRException/SDRException.h"
 
+HRFUtil::HRFParams HRFCmdParser::ParseFrameContent(frameContent frameParams)
+{
+	HRFUtil::HRFParams hrfParams;
+	hrfParams.freq_hz = frameParams.freq;
+	hrfParams.filepath = frameParams.filename.c_str();
+	hrfParams.vga_gain = frameParams.vga;
+	hrfParams.lna_gain = frameParams.lna;
+	hrfParams.txvga_gain = frameParams.txvga;
+
+	CheckCorrectParams(hrfParams);
+	return hrfParams;
+}
+
 HRFUtil::HRFParams HRFCmdParser::ParseCommandLine(int argc, char** argv)
 {
 	int opt;

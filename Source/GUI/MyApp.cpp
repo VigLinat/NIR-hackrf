@@ -1,10 +1,17 @@
 #include "MyApp.h"
-#include "Frame.h"
+#include "ParamsFrame.h"
+#include "iostream"
 
 bool MyApp::OnInit()
 {
-	Frame* frame = new Frame();
+	AllocConsole();
+	freopen("CONOUT$", "w+", stderr);
+
+	std::cerr << "Hello VisualSDR!" << std::endl;
+
+	ParamsFrame* frame = new ParamsFrame();
 	frame->Show(true);
+
 	return true;
 }
 
