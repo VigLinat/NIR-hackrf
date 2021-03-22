@@ -140,13 +140,17 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\getopt\my_getopt.cpp" />
-    <ClCompile Include="..\GUI\ParamsFrame.cpp" />
+    <ClCompile Include="..\GUI\MainFrame.cpp" />
+    <ClCompile Include="..\GUI\ParamsPanel.cpp" />
     <ClCompile Include="..\GUI\MyApp.cpp" />
     <ClCompile Include="..\hackrf\hackrf.c" />
     <ClCompile Include="..\HRFCmdParser\HRFCmdParser.cpp" />
+    <ClCompile Include="..\SDRDeviceList\HRFDeviceList.cpp" />
+    <ClCompile Include="..\SDRDeviceList\SDRDeviceList.cpp" />
     <ClCompile Include="..\SDRDevice\HRFDevice.cpp" />
     <ClCompile Include="..\SDRDevice\SdrDevice.cpp" />
     <ClCompile Include="..\SDRDevice\SdrDeviceFactory.cpp" />
+    <ClCompile Include="..\SDRException\NoHRFFound.cpp" />
     <ClCompile Include="..\SDRException\SDRException.cpp" />
     <ClCompile Include="..\SDRTransceiver\HRFTransceiver.cpp" />
     <ClCompile Include="..\SDRTransceiver\SDRTransceiver.cpp" />
@@ -155,13 +159,17 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\getopt\my_getopt.h" />
-    <ClInclude Include="..\GUI\ParamsFrame.h" />
+    <ClInclude Include="..\GUI\MainFrame.h" />
+    <ClInclude Include="..\GUI\ParamsPanel.h" />
     <ClInclude Include="..\GUI\MyApp.h" />
     <ClInclude Include="..\hackrf\hackrf.h" />
     <ClInclude Include="..\HRFCmdParser\HRFCmdParser.h" />
+    <ClInclude Include="..\SDRDeviceList\HRFDeviceList.h" />
+    <ClInclude Include="..\SDRDeviceList\SDRDeviceList.h" />
     <ClInclude Include="..\SDRDevice\HRFDevice.h" />
     <ClInclude Include="..\SDRDevice\SdrDevice.h" />
     <ClInclude Include="..\SDRDevice\SdrDeviceFactory.h" />
+    <ClInclude Include="..\SDRException\NoHRFFound.h" />
     <ClInclude Include="..\SDRException\SDRException.h" />
     <ClInclude Include="..\SDRTransceiver\HRFTransceiver.h" />
     <ClInclude Include="..\SDRTransceiver\SDRTransceiver.h" />

@@ -1,14 +1,14 @@
-#ifndef STDIO_H
-#define STDIO_H
-#include <stdio.h>
-#endif
-#include <stdlib.h>
-#include <iostream>
-#include <string>
-#include "../SDRDevice/SdrDevice.h"
-#include "../SDRDevice/HRFDevice.h"
-#include "../SDRException/SDRException.h"
-#include "../HRFCmdParser/HRFCmdParser.h"
+//#ifndef STDIO_H
+//#define STDIO_H
+//#include <stdio.h>
+//#endif
+//#include <stdlib.h>
+//#include <iostream>
+//#include <string>
+//#include "../SDRDevice/SdrDevice.h"
+//#include "../SDRDevice/HRFDevice.h"
+//#include "../SDRException/SDRException.h"
+//#include "../HRFCmdParser/HRFCmdParser.h"
 
 //int main(int argc, char** argv)
 //{

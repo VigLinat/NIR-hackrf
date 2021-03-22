@@ -1,7 +1,8 @@
 #pragma once
 #include "wx/wx.h"
-#include <list>
+#include <vector>
 #include <string>
+#include "MainFrame.h"
 
 enum
 {
@@ -11,6 +12,7 @@ enum
 enum
 {
     ID_SETALL,
+    ID_UPDATEDEVICE,
     ID_SETFILE,
     ID_SETFREQ,
     ID_SETLNA,
@@ -33,30 +35,25 @@ struct frameContent
     uint32_t txvga;
 };
 
-class ParamsFrame :
-    public wxFrame
+class ParamsPanel :
+    public wxPanel
 {
 public:
-    ParamsFrame();
+    ParamsPanel(wxWindow* parent);
     frameContent GetContent() const;
-private:
-    std::list<wxButton*> button_list;
-    std::list<wxTextCtrl*> text_list;
 
-    
+private:
+    wxWindow* parentFrame;
+    wxButton* updateButton;
+    std::vector<wxButton*> buttonList;
+    std::vector<std::pair<wxTextCtrl*, bool>> textList;
 
     frameContent params;
-
-    wxString str;
-    
-    const unsigned int button_width = 150;
-    const unsigned int button_height = 50;
-    const unsigned int button_padding = 10;
-
+private:
     void OnButtonClicked(wxCommandEvent& evt);
+    void OnTextCtrlClicked(wxMouseEvent& evt);
 
     void CreateButtons();
     void CreateRadioButtons();
     void CreateTexts();
 };
-

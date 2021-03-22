@@ -1,16 +1,19 @@
 #include "HRFCmdParser.h"
-#include "../SDRUtility/SDRUtility.h"
 #include "../getopt/my_getopt.h"
 #include "../SDRException/SDRException.h"
+#include "../GUI/ParamsPanel.h"
 
-HRFUtil::HRFParams HRFCmdParser::ParseFrameContent(frameContent frameParams)
+HRFUtil::HRFParams HRFCmdParser::ParseFrameContent(ParamsPanel paramsPanel)
 {
 	HRFUtil::HRFParams hrfParams;
-	hrfParams.freq_hz = frameParams.freq;
-	hrfParams.filepath = frameParams.filename.c_str();
-	hrfParams.vga_gain = frameParams.vga;
-	hrfParams.lna_gain = frameParams.lna;
-	hrfParams.txvga_gain = frameParams.txvga;
+	frameContent paramsFromPanel;
+	paramsFromPanel = paramsPanel.GetContent();
+
+	hrfParams.freq_hz = paramsFromPanel.freq;
+	hrfParams.filepath = paramsFromPanel.filename.c_str();
+	hrfParams.vga_gain = paramsFromPanel.vga;
+	hrfParams.lna_gain = paramsFromPanel.lna;
+	hrfParams.txvga_gain = paramsFromPanel.txvga;
 
 	CheckCorrectParams(hrfParams);
 	return hrfParams;
