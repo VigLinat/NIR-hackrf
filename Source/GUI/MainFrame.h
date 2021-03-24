@@ -10,9 +10,9 @@ class MainFrame :
 public:
     MainFrame();
 private:
-    wxButton* updateButton;
-
-    wxPanel* m_paramsPanel;
+	wxButton* updateButton;
+	wxChoice* hackrfChoiceList;
+	wxPanel* m_paramsPanel;
 
     void UpdateHRFList(wxCommandEvent& evt);
 

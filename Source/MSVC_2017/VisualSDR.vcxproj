@@ -41,15 +41,15 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>MultiByte</CharacterSet>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -93,13 +93,13 @@
       <ConformanceMode>true</ConformanceMode>
       <PreprocessorDefinitions>WIN32;_WINDOWS;_CRT_SECURE_NO_WARNINGS;TOOL_RELEASE="git-52851ee";CMAKE_INTDIR="Debug";%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>C:\Users\vladi\C-Cpp_libs\wxWidgets-3.1.4\include\msvc;C:\Users\vladi\C-Cpp_libs\wxWidgets-3.1.4\include;C:\Users\prohorov.vs\c-cpp_libs\pthreads-w32-2-9-1-release\Pre-built.2\include;C:\Users\prohorov.vs\c-cpp_libs\libusb\libusb;C:\Users\vladi\C-Cpp_libs\libusb\libusb;C:\Users\vladi\C-Cpp_libs\pthreads-w32-2-9-1-release\Pre-built.2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\..\3rdParty\wxWidgets\include;$(SolutionDir)\..\3rdParty\wxWidgets\include\msvc;C:\Users\vladi\C-Cpp_libs\wxWidgets-3.1.4\include\msvc;C:\Users\vladi\C-Cpp_libs\wxWidgets-3.1.4\include;C:\Users\prohorov.vs\c-cpp_libs\pthreads-w32-2-9-1-release\Pre-built.2\include;C:\Users\prohorov.vs\c-cpp_libs\libusb\libusb;C:\Users\vladi\C-Cpp_libs\libusb\libusb;C:\Users\vladi\C-Cpp_libs\pthreads-w32-2-9-1-release\Pre-built.2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <BuildLog>
       <Path>$(IntDir)\$(MSBuildProjectName).log</Path>
     </BuildLog>
     <Link>
-      <AdditionalLibraryDirectories>C:\Users\vladi\C-Cpp_libs\wxWidgets-3.1.4\lib\vc_x64_lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)\..\3rdParty\wxWidgets\lib\vc_x64_lib;C:\Users\vladi\C-Cpp_libs\wxWidgets-3.1.4\lib\vc_x64_lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -126,12 +126,12 @@
       <ConformanceMode>true</ConformanceMode>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;_CRT_SECURE_NO_WARNINGS;TOOL_RELEASE="git-52851ee";CMAKE_INTDIR="Release";%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>C:\Users\vladi\C-Cpp_libs\wxWidgets-3.1.4\include\msvc;C:\Users\vladi\C-Cpp_libs\wxWidgets-3.1.4\include;C:\Users\prohorov.vs\c-cpp_libs\pthreads-w32-2-9-1-release\Pre-built.2\include;C:\Users\prohorov.vs\c-cpp_libs\libusb\libusb;C:\Users\vladi\C-Cpp_libs\pthreads-w32-2-9-1-release\Pre-built.2\include;C:\Users\vladi\C-Cpp_libs\libusb\libusb;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\..\3rdParty\wxWidgets\include;$(SolutionDir)\..\3rdParty\wxWidgets\include\msvc;C:\Users\vladi\C-Cpp_libs\wxWidgets-3.1.4\include\msvc;C:\Users\vladi\C-Cpp_libs\wxWidgets-3.1.4\include;C:\Users\prohorov.vs\c-cpp_libs\pthreads-w32-2-9-1-release\Pre-built.2\include;C:\Users\prohorov.vs\c-cpp_libs\libusb\libusb;C:\Users\vladi\C-Cpp_libs\pthreads-w32-2-9-1-release\Pre-built.2\include;C:\Users\vladi\C-Cpp_libs\libusb\libusb;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>C:\Users\vladi\C-Cpp_libs\wxWidgets-3.1.4\lib\vc_x64_lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)\..\3rdParty\wxWidgets\lib\vc_x64_lib;C:\Users\vladi\C-Cpp_libs\wxWidgets-3.1.4\lib\vc_x64_lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <SubSystem>NotSet</SubSystem>
     </Link>
     <BuildLog>
@@ -174,7 +174,6 @@
     <ClInclude Include="..\SDRTransceiver\HRFTransceiver.h" />
     <ClInclude Include="..\SDRTransceiver\SDRTransceiver.h" />
     <ClInclude Include="..\SDRUtility\SDRUtility.h" />
-    <ClInclude Include="resource.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

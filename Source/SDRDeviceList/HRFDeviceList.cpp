@@ -1,41 +1,59 @@
 #include "HRFDeviceList.h"
+#include "../SDRUtility/SDRUtility.h"
 #include "../SDRException/NoHRFFound.h"
 HRFDeviceList::HRFDeviceList()
 {
 	//UpdateList();
 }
 
-void HRFDeviceList::UpdateList()
+HRFDeviceList::~HRFDeviceList()
 {
-	bool isInList = false;
-	hackrf_device_list_t* list;
+	hackrf_device_list_free(m_list);
+}
 
-	list = hackrf_device_list();
-
-	if (list->devicecount < 1)
+wxArrayString HRFDeviceList::GetDeviceList() const
+{
+	wxArrayString deviceNameList;
+	for (auto it = m_hrfDeviceList.begin(); it != m_hrfDeviceList.end(); it++)
 	{
-		throw new NoHRFFound();
+		const char* serial = (*it)->GetSerialNumber();
+		uint32_t maxn = strlen(serial);
+		wxString last4digits = wxString(serial).SubString(maxn - 4, maxn - 1);
+
+		deviceNameList.Add(wxString("HackRF: ") + last4digits);
 	}
-	else 
+	return deviceNameList;
+}
+
+bool HRFDeviceList::UpdateList()
+{
+	bool isNewDeviceDetected = false;
+
+	m_list = hackrf_device_list();
+	int count = m_list->devicecount;
+	if (m_list->devicecount < 1)
 	{
-		for (int i = 0; i < list->devicecount; i++)
+		throw NoHRFFound();
+	}
+	else
+	{
+		bool shouldUpdateList = false;
+		for (int i = 0; i < m_list->devicecount; i++)
 		{
 			for (auto it = m_hrfDeviceList.begin(); it != m_hrfDeviceList.end(); it++)
 			{
-				if (strcmp(list->serial_numbers[i], (*it)->GetSerialNumber()))
+				if ((strcmp(m_list->serial_numbers[i], (*it)->GetSerialNumber())) == 0)
 				{
-					isInList = true;
-					break;
+					shouldUpdateList = true;
 				}
 			}
-			if (isInList)
+			if (!shouldUpdateList)
 			{
-				break;
-			}
-			else 
-			{
-				m_hrfDeviceList.push_back(new HRFDevice(list->serial_numbers[i]));
+				isNewDeviceDetected = true;
+				m_hrfDeviceList.push_back(new HRFDevice(m_list->serial_numbers[i]));
 			}
 		}
 	}
+
+	return isNewDeviceDetected ? true : false;
 }

@@ -9,6 +9,8 @@
 
 namespace HRFUtil {
 
+	const uint32_t HRF_SERIAL_NUMBER_LENGTH = 64;
+
 	enum MODULATIONS : uint16_t {
 		VSDR_MODULATION_PSK_2,
 		VSDR_MODULATION_PSK_4,

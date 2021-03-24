@@ -24,7 +24,7 @@
 //		sdrDevice->SetCmdLineParams(cmdLineParams);
 //		sdrDevice->Init();
 //	}
-//	catch (SDRException e)
+//	catch (const SDRException& e)
 //	{
 //		std::cerr << e.What() << std::endl;
 //	}

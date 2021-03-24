@@ -101,9 +101,6 @@
     <ClInclude Include="..\GUI\MyApp.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="resource.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
     <ClInclude Include="..\GUI\MainFrame.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>

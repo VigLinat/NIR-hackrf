@@ -10,6 +10,7 @@ HRFDevice::HRFDevice()
 
 HRFDevice::HRFDevice(const char* serialNumber)
 {
+	m_device = nullptr;
 	m_serialNumber = serialNumber;
 }
 

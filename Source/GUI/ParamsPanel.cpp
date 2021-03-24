@@ -23,12 +23,6 @@ void ParamsPanel::OnButtonClicked(wxCommandEvent& evt)
 			case ID_SETFREQ:
 				params.freq = atoll((*it).first->GetValue());
 				break;
-			case ID_SETLNA:
-				params.lna = atoi((*it).first->GetValue());
-				break;
-			case ID_SETVGA:
-				params.vga = atoi((*it).first->GetValue());
-				break;
 			case ID_SETTXVGA:
 				params.txvga = atoi((*it).first->GetValue());
 				break;
@@ -69,7 +63,7 @@ frameContent ParamsPanel::GetContent() const
 void ParamsPanel::CreateButtons()
 {
 	buttonList.push_back(
-		new wxButton(this, ID_SETALL, "Set Params", wxPoint(10, 280), wxSize(150, 50))
+		new wxButton(this, ID_SETALL, "Set Params", wxPoint(10, 340), wxSize(150, 50))
 	);
 
 	for (auto& btn : buttonList)
@@ -80,7 +74,8 @@ void ParamsPanel::CreateButtons()
 
 void ParamsPanel::CreateRadioButtons()
 {
-
+	const wxString choices[] = { "Tx", "Rx" };
+	modeSelection = new wxRadioBox(this, ID_SETMODE, "Select Mode", wxPoint(10, 120), wxSize(100, 100), 2, choices);
 }
 
 void ParamsPanel::CreateTexts()
@@ -94,14 +89,14 @@ void ParamsPanel::CreateTexts()
 
 	textList.push_back(
 		std::pair<wxTextCtrl*, bool>(
-			new wxTextCtrl(this, ID_SETFREQ, "Enter frequency", wxPoint(10, 120), wxSize(150, 30)),
+			new wxTextCtrl(this, ID_SETFREQ, "Enter frequency", wxPoint(10, 240), wxSize(150, 30)),
 			false
 			)
 	);
 
 	textList.push_back(
 		std::pair<wxTextCtrl*, bool>(
-			new wxTextCtrl(this, ID_SETTXVGA, "Enter TX VGA", wxPoint(10, 170), wxSize(150, 30)),
+			new wxTextCtrl(this, ID_SETTXVGA, "Enter TX VGA", wxPoint(10, 290), wxSize(150, 30)),
 			false
 			)
 	);

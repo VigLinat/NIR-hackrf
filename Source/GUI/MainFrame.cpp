@@ -8,7 +8,8 @@ MainFrame::MainFrame()
 	
 	m_paramsPanel = new ParamsPanel(this);
 
-	updateButton = new wxButton(m_paramsPanel, ID_UPDATEDEVICE, "Update", wxPoint(300, 10), wxSize(150, 50));
+	hackrfChoiceList = new wxChoice(m_paramsPanel, ID_DEVICELIST, wxPoint(10, 10), wxSize(250, 30));
+	updateButton = new wxButton(m_paramsPanel, ID_UPDATEDEVICE, "Update", wxPoint(270, 10), wxSize(100, 30));
 
 	updateButton->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &MainFrame::UpdateHRFList, this);
 }
@@ -17,10 +18,20 @@ void MainFrame::UpdateHRFList(wxCommandEvent& evt)
 {
 	try
 	{
-		m_hrfDeviceList.UpdateList();
+		bool isNewDeviceDetected = false;
+		isNewDeviceDetected = m_hrfDeviceList.UpdateList();
+		if (isNewDeviceDetected)
+		{
+			wxArrayString hackrfArrayString = m_hrfDeviceList.GetDeviceList();
+			hackrfChoiceList->Clear();
+			for (auto it = hackrfArrayString.begin(); it != hackrfArrayString.end(); it++)
+			{
+				hackrfChoiceList->AppendString((*it));
+			}
+		}
 	}
-	catch (NoHRFFound e)
+	catch (const SDRException& e)
 	{
-		/* show dialog box "No HRF Found!" */
+		wxMessageBox(e.What());
 	}
 }

@@ -6,6 +6,6 @@ class NoHRFFound :
 public:
     NoHRFFound();
     
-    std::string What();
+    std::string What() const override;
 };
 

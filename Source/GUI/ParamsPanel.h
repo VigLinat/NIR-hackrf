@@ -12,9 +12,11 @@ enum
 enum
 {
     ID_SETALL,
+	ID_DEVICELIST,
     ID_UPDATEDEVICE,
     ID_SETFILE,
     ID_SETFREQ,
+	ID_SETMODE,
     ID_SETLNA,
     ID_SETVGA,
     ID_SETTXVGA,
@@ -45,6 +47,7 @@ public:
 private:
     wxWindow* parentFrame;
     wxButton* updateButton;
+	wxRadioBox* modeSelection;
     std::vector<wxButton*> buttonList;
     std::vector<std::pair<wxTextCtrl*, bool>> textList;
 

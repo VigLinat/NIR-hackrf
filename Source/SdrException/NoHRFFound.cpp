@@ -5,7 +5,7 @@ NoHRFFound::NoHRFFound()
 
 }
 
-std::string NoHRFFound::What()
+std::string NoHRFFound::What() const
 {
 	return "No HackRF Device found";
 }
