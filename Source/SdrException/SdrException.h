@@ -8,7 +8,7 @@ public:
 	SDRException();
 	 
 	SDRException(const hackrf_error result);
-	
+
 	virtual std::string What() const;
 
 private:

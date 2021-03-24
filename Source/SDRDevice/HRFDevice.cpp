@@ -8,6 +8,11 @@ HRFDevice::HRFDevice()
 	m_serialNumber = nullptr;
 }
 
+HRFDevice::HRFDevice(const char* serialNumber)
+{
+	m_serialNumber = serialNumber;
+}
+
 HRFDevice::~HRFDevice()
 {
 	OnExit();
@@ -18,6 +23,11 @@ HRFDevice::~HRFDevice()
 void HRFDevice::SendData(HRFUtil::MODULATIONS mod)
 {
 	m_transceiver.Transfer(m_device);
+}
+
+const char* HRFDevice::GetSerialNumber() const
+{
+	return m_serialNumber;
 }
 
 // Initialize hackrf device via libusb here

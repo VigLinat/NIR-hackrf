@@ -3,6 +3,5 @@
 class MyApp :
     public wxApp
 {
+    virtual bool OnInit();
 };
-
-//wxIMPLEMENT_APP(MyApp);
