@@ -10,6 +10,7 @@ class HRFDevice :
 {
 public:
 	HRFDevice();
+	HRFDevice(const char* serialNumber);
 	~HRFDevice();
 
 	//send data from fileToSend using modulation mod
@@ -19,6 +20,8 @@ public:
 	void Init();
 
 	void SetCmdLineParams(const HRFUtil::HRFParams& params);
+
+	const char* GetSerialNumber() const;
 
 	void OnExit();
 private:
@@ -31,6 +34,4 @@ private:
 	const char* m_serialNumber;
 
 	static volatile uint32_t m_byte_count;
-
-	
 };

@@ -1,0 +1,33 @@
+Buttons:
+* SetFileName
+* SetFrequency
+* Set LNA
+* Set VGA
+* Set TX VGA 
+= 5
+
+Radiobuttons:
+* RX Mode
+* TX Mode
+* Yes Amp
+* No Amp
+= 4
+
+TextFields:
+* Open File 
+* Set Mode
+* Frequency 
+* Amplification 
+* LNA Gain
+* VGA Gain
+* TX VGA gain 
+
+* "filename..."
+* "f = ... Hz"
+* "LNA = ..."
+* "VGA = ..."
+* "TX VGA = ..."
+=12
+
+TODO: 
+list ui in xml document and then parse it insdie the programm
