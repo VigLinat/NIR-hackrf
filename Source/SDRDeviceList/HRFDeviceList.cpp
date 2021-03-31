@@ -6,34 +6,30 @@ HRFDeviceList::HRFDeviceList()
 
 }
 
-wxArrayString&& HRFDeviceList::GetSerialNumbers() const 
-{
-	wxArrayString deviceNameList;
-	for (auto it = m_hrfDeviceList.begin(); it != m_hrfDeviceList.end(); it++)
-	{
-		deviceNameList.Add(wxString((*it)->GetSerialNumber()));
-	}
-	return std::move(deviceNameList);
-}
-
 void HRFDeviceList::UpdateList()
 {
+	m_hrfDeviceList.clear();
 	hackrf_device_list_t* list = hackrf_device_list();
-
 	if (list->devicecount < 1)
+		return;
+	else
 	{
-		throw NoHRFFound();
+		for (int i = 0; i < list->devicecount; i++)
+		{
+			m_hrfDeviceList.push_back(new HRFDevice(list->serial_numbers[i]));
+		}
+		hackrf_device_list_free(list);
 	}
-	
-	for (auto it = m_hrfDeviceList.begin(); it != m_hrfDeviceList.end(); it++)
-	{
-		delete (*it);
-	}
+}
 
-	for (int i = 0; i < list->devicecount; i++)
+std::vector<const char*> HRFDeviceList::GetSerialNumbers() const
+{
+	size_t count = m_hrfDeviceList.size();
+	std::vector<const char*> serial(count);
+	int i = 0;
+	for (auto device : m_hrfDeviceList)
 	{
-		m_hrfDeviceList.push_back(new HRFDevice(list->serial_numbers[i]));
+		serial[i++] = device->GetSerialNumber();
 	}
-
-	hackrf_device_list_free(list);
+	return serial;
 }

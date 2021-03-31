@@ -93,7 +93,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PreprocessorDefinitions>WIN32;_WINDOWS;_CRT_SECURE_NO_WARNINGS;TOOL_RELEASE="git-52851ee";CMAKE_INTDIR="Debug";%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)\..\3rdParty\pthreads-w32-2-9-1-release\include;$(SolutionDir)\..\3rdParty\libusb\libusb\libusb;$(SolutionDir)\..\3rdParty\wxWidgets\include;$(SolutionDir)\..\3rdParty\wxWidgets\include\msvc;C:\Users\vladi\C-Cpp_libs\libusb\libusb;C:\Users\vladi\C-Cpp_libs\pthreads-w32-2-9-1-release\Pre-built.2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\..\3rdParty\pthreads-w32-2-9-1-release\include;$(SolutionDir)\..\3rdParty\libusb\libusb\libusb;$(SolutionDir)\..\3rdParty\wxWidgets\include;$(SolutionDir)\..\3rdParty\wxWidgets\include\msvc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <BuildLog>
       <Path>$(IntDir)\$(MSBuildProjectName).log</Path>

@@ -2,47 +2,47 @@
 #include "../SDRException/NoHRFFound.h"
 #include "ParamsPanel.h"
 #include <exception>
+
 MainFrame::MainFrame() 
 	: wxFrame(NULL, wxID_ANY, "Visual SDR", wxPoint(50, 50), wxSize(800, 600))
 {
 	
 	m_paramsPanel = new ParamsPanel(this);
 
-	deviceChoiceList = new wxChoice(m_paramsPanel, ID_DEVICELIST, wxPoint(10, 10), wxSize(250, 30));
-	updateButton = new wxButton(m_paramsPanel, ID_UPDATEDEVICE, "Update", wxPoint(270, 10), wxSize(100, 30));
+	m_deviceChoiceList = new wxChoice(m_paramsPanel, ID_DEVICELIST, wxPoint(10, 10), wxSize(250, 30));
+	m_updateButton = new wxButton(m_paramsPanel, ID_UPDATEDEVICE, "Update", wxPoint(270, 10), wxSize(100, 30));
 
-	updateButton->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &MainFrame::UpdateDeviceList, this);
+	m_updateButton->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &MainFrame::UpdateDeviceList, this);
 
 	m_deviceList = new HRFDeviceList;
 }
 
 void MainFrame::UpdateDeviceList(wxCommandEvent& evt)
 {
-	try
+	m_deviceChoiceList->Clear();
+	UpdateListCommand command{ m_deviceList };
+	command.Execute();
+	std::vector<const char*> serials = command.GetSerialNumbers();
+	if (serials.size() < 1)
 	{
-		bool isNewDeviceDetected = false;
-		m_deviceList->UpdateList();
-
-		wxArrayString serialNumbers = m_deviceList->GetSerialNumbers();
-		deviceChoiceList->Clear();
-		for (auto it = serialNumbers.begin(); it != serialNumbers.end(); it++)
-		{
-			size_t maxn = (*it).length();
-			wxString last4digits = (*it).SubString(maxn - 4, maxn - 1);
-			deviceChoiceList->AppendString(wxString("HackRF: ") + last4digits);
-		}
+		wxMessageBox("No connected SDR boards Found!");
+		return;
 	}
-	catch (const NoHRFFound& e)
+	else
 	{
-		wxMessageBox(e.What());
+		for (auto device : serials)
+		{
+			size_t maxn = strlen(device);
+			std::string last4digits = &device[maxn - 4];
+			m_deviceChoiceList->AppendString(std::string("HackRF: ") + last4digits);
+		}
 	}
 }
 
 MainFrame::~MainFrame()
 {
-	delete updateButton;
-	delete deviceChoiceList;
+	delete m_updateButton;
+	delete m_deviceChoiceList;
 	delete m_paramsPanel;
-
 	delete m_deviceList;
 }

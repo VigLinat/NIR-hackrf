@@ -1,8 +1,9 @@
 #pragma once
 #include "../SDRDevice/SdrDevice.h"
-#include "wx/wx.h"
+#include <vector>
 class SDRDeviceList
 {
-	virtual wxArrayString&& GetSerialNumbers() const = 0;
+public:
+	virtual std::vector<const char*> GetSerialNumbers() const = 0;
 	virtual void UpdateList() = 0;
 };

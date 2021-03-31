@@ -25,13 +25,13 @@ public:
 
 	void OnExit();
 private:
-	HRFTransceiver m_transceiver;
+	HRFTransceiver* m_transceiver;
 
 	std::string m_filename;
 	hackrf_device* m_device;
 
 	std::shared_ptr<HRFUtil::HRFParams> m_params;
-	const char* m_serialNumber;
+	char* m_serialNumber;
 
 	static volatile uint32_t m_byte_count;
 };

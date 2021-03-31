@@ -3,6 +3,8 @@
 #include "ParamsPanel.h"
 #include "../SDRDevice/HRFDevice.h"
 #include "../SDRDeviceList/HRFDeviceList.h"
+#include "../SDRDeviceList/SDRDeviceList.h"
+#include "../Command/UpdateListCommand.h"
 
 class MainFrame :
     public wxFrame
@@ -11,11 +13,10 @@ public:
     MainFrame();
     ~MainFrame();
 private:
-	wxButton* updateButton;
-	wxChoice* deviceChoiceList;
+	void UpdateDeviceList(wxCommandEvent& evt);
+
+	wxButton* m_updateButton;
+	wxChoice* m_deviceChoiceList;
 	wxPanel* m_paramsPanel;
-
-    void UpdateDeviceList(wxCommandEvent& evt);
-
     HRFDeviceList* m_deviceList;
 };

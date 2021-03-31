@@ -11,7 +11,9 @@ HRFDevice::HRFDevice()
 HRFDevice::HRFDevice(const char* serialNumber)
 {
 	m_device = nullptr;
-	m_serialNumber = serialNumber;
+	size_t len = strlen(serialNumber);
+	m_serialNumber = new char[len];
+	strcpy(m_serialNumber, serialNumber);
 }
 
 HRFDevice::~HRFDevice()
@@ -23,7 +25,7 @@ HRFDevice::~HRFDevice()
 /*TODO : SendData inits HRFTransceiver and calls HRFTransceiver::Transfer*/
 void HRFDevice::SendData(HRFUtil::MODULATIONS mod)
 {
-	m_transceiver.Transfer(m_device);
+	m_transceiver->Transfer(m_device);
 }
 
 const char* HRFDevice::GetSerialNumber() const
@@ -34,15 +36,7 @@ const char* HRFDevice::GetSerialNumber() const
 // Initialize hackrf device via libusb here
 void HRFDevice::Init()
 {
-
 	int result = 0;
-	result = hackrf_init();
-
-	if ( result != HACKRF_SUCCESS )
-	{
-		throw SDRException((hackrf_error)result);
-	}
-	
 	result = hackrf_open_by_serial(m_serialNumber, &m_device);
 	if ( result != HACKRF_SUCCESS )
 	{
@@ -82,7 +76,7 @@ void HRFDevice::Init()
 		throw SDRException((hackrf_error)result);
 	}
 
-	m_transceiver = HRFTransceiver(m_params, m_params->filepath);
+	m_transceiver = new HRFTransceiver(m_params, m_params->filepath);
 }
 
 void HRFDevice::SetCmdLineParams(const HRFUtil::HRFParams& params)
@@ -94,7 +88,11 @@ void HRFDevice::SetCmdLineParams(const HRFUtil::HRFParams& params)
 
 void HRFDevice::OnExit()
 {
-	// hackrf_close(), hackrf_exit() ...
+	delete m_transceiver;
+
+	if (m_serialNumber != nullptr)
+		delete m_serialNumber;
+
 	int result = 0;
 	if (m_device != nullptr) {
 		if (m_params->receive || m_params->receive_wav) {
@@ -124,10 +122,5 @@ void HRFDevice::OnExit()
 		else {
 			fprintf(stderr, "hackrf_close() done\n");
 		}
-
-		hackrf_exit();
-		fprintf(stderr, "hackrf_exit() done\n");
-		
-		std::cerr << "exit" << std::endl;
 	}
 }

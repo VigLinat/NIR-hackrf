@@ -2,15 +2,12 @@
 #include "HRFTransceiver.h"
 #include "../HRFCmdParser/HRFCmdParser.h"
 #include "../SDRException/SDRException.h"
-
-
 volatile uint32_t byte_count = 0;
 
 struct timeval time_start;
 struct timeval t_start;
 
 bool do_exit = false;
-
 static int gettimeofday(struct timeval* tv, void* ignored)
 {
 	FILETIME ft;
@@ -34,21 +31,9 @@ TimevalDiff(const struct timeval* a, const struct timeval* b)
 	return (a->tv_sec - b->tv_sec) + 1e-6f * (a->tv_usec - b->tv_usec);
 }
 
-bool WINAPI sighandler(int signum)
-{
-	if (CTRL_C_EVENT == signum) {
-		fprintf(stderr, "Caught signal %d\n", signum);
-		do_exit = true;
-		return TRUE;
-	}
-	return FALSE;
-}
-
 HRFTransceiver::HRFTransceiver()
 {
 	m_params = nullptr;
-	m_fileToSend = std::ifstream();
-	SetConsoleCtrlHandler((PHANDLER_ROUTINE)sighandler, TRUE);
 }
 
 HRFTransceiver::HRFTransceiver(const std::shared_ptr<HRFUtil::HRFParams> params, const std::string filename)
@@ -59,6 +44,11 @@ HRFTransceiver::HRFTransceiver(const std::shared_ptr<HRFUtil::HRFParams> params,
 		m_fileToSend = std::ifstream();
 		m_fileToSend.open(filename, std::ios::binary);
 	}
+}
+
+HRFTransceiver::~HRFTransceiver()
+{
+	m_fileToSend.close();
 }
 
 void HRFTransceiver::Receive()
@@ -76,7 +66,57 @@ void HRFTransceiver::Transfer(hackrf_device* device)
 	float time_diff;
 
 	result = hackrf_set_txvga_gain(device, m_params->txvga_gain);
-	result |= hackrf_start_tx(device, tx_callback, NULL);
+	/*result |= hackrf_start_tx(device, &HRFTransceiver::tx_callback, NULL);*/
+
+	auto callback = std::bind(&HRFTransceiver::tx_callback, this);
+	
+	result |= hackrf_start_tx(
+		device, [this](hackrf_transfer* transfer) -> int 
+	{
+		if (this->m_fileToSend.is_open() && m_fileToSend.good() && !m_fileToSend.eof())
+		{
+			size_t buffer_length = transfer->valid_length;
+			byte_count += buffer_length / 8;
+			size_t bits_to_read = buffer_length / 8;
+			char* read_buffer = (char*)malloc(bits_to_read);
+			m_fileToSend.read(read_buffer, bits_to_read);
+
+			size_t bits_read = m_fileToSend.gcount();
+			make_psk4_buffer(transfer->buffer, read_buffer, bits_read);
+			if (bits_read != bits_to_read)
+			{
+				if (m_params->repeat)
+				{
+					size_t extra_bits = bits_to_read - bits_read;
+					std::cerr << "Input file end reached. Rewind to beginning" << std::endl;
+					m_fileToSend.seekg(0);
+					m_fileToSend.read(read_buffer + bits_read, extra_bits);
+					make_psk4_buffer(transfer->buffer + bits_read * 8, read_buffer + bits_read, extra_bits);
+					free(read_buffer);
+					return 0;
+				}
+				else
+				{
+					std::cout << "End of file reached" << std::endl;
+					free(read_buffer);
+					m_fileToSend.close();
+					return -1;
+				}
+			}
+			else
+			{
+				free(read_buffer);
+				return 0;
+			}
+		}
+		else
+		{
+			m_fileToSend.close();
+			return -1;
+		}
+	},
+		NULL
+	);
 
 	EnableParamsForRXTX(device);
 
@@ -265,3 +305,4 @@ void HRFTransceiver::EnableParamsForRXTX(hackrf_device* device)
 			HRFCmdParser::u64toa((m_params->samples_to_xfer / FREQ_ONE_MHZ), &ascii_u64_data2));
 	}
 }
+
