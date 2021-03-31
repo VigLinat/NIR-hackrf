@@ -2,23 +2,21 @@
 #include "../hackrf/hackrf.h"
 #include "wx/arrstr.h"
 #include "wx/string.h"
-#include "../SDRDevice/SdrDevice.h"
+#include "SDRDeviceList.h"
 #include "../SDRDevice/HRFDevice.h"
 #include <vector>
 
-class HRFDeviceList
+class HRFDeviceList : 
+	SDRDeviceList
 {
 public:
 	HRFDeviceList();
 
-	bool UpdateList();
+	void UpdateList() override;
+	wxArrayString&& GetSerialNumbers() const override;
 
-	HRFDevice* GetDeviceById() const;
-	wxArrayString GetDeviceList() const;
-
-	~HRFDeviceList();
+	~HRFDeviceList() = default;
 
 private:
 	std::vector<HRFDevice*> m_hrfDeviceList;
-	hackrf_device_list_t* m_list;
 };

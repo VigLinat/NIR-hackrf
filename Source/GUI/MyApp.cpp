@@ -14,7 +14,8 @@ bool MyApp::OnInit()
 	std::cerr << "Hello VisualSDR!" << std::endl;
 
 	result = hackrf_init();
-	if (result != HACKRF_SUCCESS) {
+	if (result != HACKRF_SUCCESS) 
+	{
 		fprintf(stderr, "hackrf_init() failed: %s (%d)\n",
 			hackrf_error_name((hackrf_error)result), result);
 		return EXIT_FAILURE;

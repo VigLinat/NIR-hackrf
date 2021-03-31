@@ -8,30 +8,41 @@ MainFrame::MainFrame()
 	
 	m_paramsPanel = new ParamsPanel(this);
 
-	hackrfChoiceList = new wxChoice(m_paramsPanel, ID_DEVICELIST, wxPoint(10, 10), wxSize(250, 30));
+	deviceChoiceList = new wxChoice(m_paramsPanel, ID_DEVICELIST, wxPoint(10, 10), wxSize(250, 30));
 	updateButton = new wxButton(m_paramsPanel, ID_UPDATEDEVICE, "Update", wxPoint(270, 10), wxSize(100, 30));
 
-	updateButton->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &MainFrame::UpdateHRFList, this);
+	updateButton->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &MainFrame::UpdateDeviceList, this);
+
+	m_deviceList = new HRFDeviceList;
 }
 
-void MainFrame::UpdateHRFList(wxCommandEvent& evt)
+void MainFrame::UpdateDeviceList(wxCommandEvent& evt)
 {
 	try
 	{
 		bool isNewDeviceDetected = false;
-		isNewDeviceDetected = m_hrfDeviceList.UpdateList();
-		if (isNewDeviceDetected)
+		m_deviceList->UpdateList();
+
+		wxArrayString serialNumbers = m_deviceList->GetSerialNumbers();
+		deviceChoiceList->Clear();
+		for (auto it = serialNumbers.begin(); it != serialNumbers.end(); it++)
 		{
-			wxArrayString hackrfArrayString = m_hrfDeviceList.GetDeviceList();
-			hackrfChoiceList->Clear();
-			for (auto it = hackrfArrayString.begin(); it != hackrfArrayString.end(); it++)
-			{
-				hackrfChoiceList->AppendString((*it));
-			}
+			size_t maxn = (*it).length();
+			wxString last4digits = (*it).SubString(maxn - 4, maxn - 1);
+			deviceChoiceList->AppendString(wxString("HackRF: ") + last4digits);
 		}
 	}
-	catch (const SDRException& e)
+	catch (const NoHRFFound& e)
 	{
 		wxMessageBox(e.What());
 	}
+}
+
+MainFrame::~MainFrame()
+{
+	delete updateButton;
+	delete deviceChoiceList;
+	delete m_paramsPanel;
+
+	delete m_deviceList;
 }

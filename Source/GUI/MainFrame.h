@@ -9,12 +9,13 @@ class MainFrame :
 {
 public:
     MainFrame();
+    ~MainFrame();
 private:
 	wxButton* updateButton;
-	wxChoice* hackrfChoiceList;
+	wxChoice* deviceChoiceList;
 	wxPanel* m_paramsPanel;
 
-    void UpdateHRFList(wxCommandEvent& evt);
+    void UpdateDeviceList(wxCommandEvent& evt);
 
-    HRFDeviceList m_hrfDeviceList;
+    HRFDeviceList* m_deviceList;
 };

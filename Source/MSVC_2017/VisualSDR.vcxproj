@@ -41,7 +41,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
@@ -93,7 +93,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PreprocessorDefinitions>WIN32;_WINDOWS;_CRT_SECURE_NO_WARNINGS;TOOL_RELEASE="git-52851ee";CMAKE_INTDIR="Debug";%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)\..\3rdParty\wxWidgets\include;$(SolutionDir)\..\3rdParty\wxWidgets\include\msvc;C:\Users\vladi\C-Cpp_libs\wxWidgets-3.1.4\include\msvc;C:\Users\vladi\C-Cpp_libs\wxWidgets-3.1.4\include;C:\Users\prohorov.vs\c-cpp_libs\pthreads-w32-2-9-1-release\Pre-built.2\include;C:\Users\prohorov.vs\c-cpp_libs\libusb\libusb;C:\Users\vladi\C-Cpp_libs\libusb\libusb;C:\Users\vladi\C-Cpp_libs\pthreads-w32-2-9-1-release\Pre-built.2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\..\3rdParty\wxWidgets\include;$(SolutionDir)\..\3rdParty\wxWidgets\include\msvc;C:\Users\prohorov.vs\c-cpp_libs\pthreads-w32-2-9-1-release\Pre-built.2\include;C:\Users\prohorov.vs\c-cpp_libs\libusb\libusb;C:\Users\vladi\C-Cpp_libs\libusb\libusb;C:\Users\vladi\C-Cpp_libs\pthreads-w32-2-9-1-release\Pre-built.2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <BuildLog>
       <Path>$(IntDir)\$(MSBuildProjectName).log</Path>
@@ -139,6 +139,8 @@
     </BuildLog>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\Command\Command.cpp" />
+    <ClCompile Include="..\Command\UpdateListCommand.cpp" />
     <ClCompile Include="..\getopt\my_getopt.cpp" />
     <ClCompile Include="..\GUI\MainFrame.cpp" />
     <ClCompile Include="..\GUI\ParamsPanel.cpp" />
@@ -146,18 +148,15 @@
     <ClCompile Include="..\hackrf\hackrf.c" />
     <ClCompile Include="..\HRFCmdParser\HRFCmdParser.cpp" />
     <ClCompile Include="..\SDRDeviceList\HRFDeviceList.cpp" />
-    <ClCompile Include="..\SDRDeviceList\SDRDeviceList.cpp" />
     <ClCompile Include="..\SDRDevice\HRFDevice.cpp" />
     <ClCompile Include="..\SDRDevice\SdrDevice.cpp" />
-    <ClCompile Include="..\SDRDevice\SdrDeviceFactory.cpp" />
     <ClCompile Include="..\SDRException\NoHRFFound.cpp" />
     <ClCompile Include="..\SDRException\SDRException.cpp" />
     <ClCompile Include="..\SDRTransceiver\HRFTransceiver.cpp" />
-    <ClCompile Include="..\SDRTransceiver\SDRTransceiver.cpp" />
-    <ClCompile Include="..\SDRUtility\SDRUtility.cpp" />
-    <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\Command\Command.h" />
+    <ClInclude Include="..\Command\UpdateListCommand.h" />
     <ClInclude Include="..\getopt\my_getopt.h" />
     <ClInclude Include="..\GUI\MainFrame.h" />
     <ClInclude Include="..\GUI\ParamsPanel.h" />
@@ -168,7 +167,6 @@
     <ClInclude Include="..\SDRDeviceList\SDRDeviceList.h" />
     <ClInclude Include="..\SDRDevice\HRFDevice.h" />
     <ClInclude Include="..\SDRDevice\SdrDevice.h" />
-    <ClInclude Include="..\SDRDevice\SdrDeviceFactory.h" />
     <ClInclude Include="..\SDRException\NoHRFFound.h" />
     <ClInclude Include="..\SDRException\SDRException.h" />
     <ClInclude Include="..\SDRTransceiver\HRFTransceiver.h" />
