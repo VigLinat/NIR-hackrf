@@ -9,8 +9,10 @@ public:
 	 
 	SDRException(const hackrf_error result);
 
+	SDRException(const std::string& message);
+
 	virtual std::string What() const;
 
 private:
-	hackrf_error m_result;
+	std::string m_message;
 };

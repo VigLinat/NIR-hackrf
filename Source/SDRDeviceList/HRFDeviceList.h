@@ -11,6 +11,7 @@ public:
 
 	void UpdateList() override;
 	std::vector<const char*> GetSerialNumbers() const override;
+	void SetParamsBySerial(const char* serial, HRFUtil::HRFParams params);
 	~HRFDeviceList() = default;
 
 private:

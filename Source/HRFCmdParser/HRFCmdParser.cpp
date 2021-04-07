@@ -3,22 +3,6 @@
 #include "../SDRException/SDRException.h"
 #include "../GUI/ParamsPanel.h"
 
-HRFUtil::HRFParams HRFCmdParser::ParseFrameContent(ParamsPanel paramsPanel)
-{
-	HRFUtil::HRFParams hrfParams;
-	frameContent paramsFromPanel;
-	paramsFromPanel = paramsPanel.GetContent();
-
-	hrfParams.freq_hz = paramsFromPanel.freq;
-	hrfParams.filepath = paramsFromPanel.filename.c_str();
-	hrfParams.vga_gain = paramsFromPanel.vga;
-	hrfParams.lna_gain = paramsFromPanel.lna;
-	hrfParams.txvga_gain = paramsFromPanel.txvga;
-
-	CheckCorrectParams(hrfParams);
-	return hrfParams;
-}
-
 HRFUtil::HRFParams HRFCmdParser::ParseCommandLine(int argc, char** argv)
 {
 	int opt;

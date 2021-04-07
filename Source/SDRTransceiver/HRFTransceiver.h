@@ -7,19 +7,26 @@ class HRFTransceiver :
     public SDRTransceiver
 {   
 public:
-    HRFTransceiver();
-    HRFTransceiver(const std::shared_ptr<HRFUtil::HRFParams> params, const std::string filename);
+	HRFTransceiver(hackrf_device* device);
 	~HRFTransceiver();
-	void Transfer(hackrf_device* device);
-    void Receive();
+
+	HRFTransceiver& operator==(const HRFTransceiver&) = delete;
+
+	void Transfer() override;
+	void Receive() override {};
+	void SetParams(const HRFUtil::HRFParams params);
+	int GetStreamingStatus() const;
+
+	void Stop();
 
 private:
 	void EnableParamsForRXTX(hackrf_device* device);
-	int tx_callback(hackrf_transfer* transfer);
+	void InitTransceiver();
 
-	std::shared_ptr<HRFUtil::HRFParams> m_params;
-    std::ifstream m_fileToSend;
+	hackrf_device* m_device;
+	HRFUtil::HRFParams m_params;
 
 	static void make_psk4_buffer(uint8_t* buffer, char* data, size_t size);
-	static void test(uint8_t* buffer, size_t buffer_size);
+	static int gettimeofday(struct timeval* tv, void* ignored);
+	static float TimevalDiff(const struct timeval* a, const struct timeval* b);
 };

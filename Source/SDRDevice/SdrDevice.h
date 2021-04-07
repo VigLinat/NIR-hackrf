@@ -12,6 +12,4 @@ public:
 
 	// Init USBDevice via libusb
 	virtual void Init() = 0;
-
-	virtual void SetCmdLineParams(const HRFUtil::HRFParams& params) = 0;
 };

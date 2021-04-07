@@ -7,7 +7,6 @@ class HRFCmdParser
 {
 public:
 	static HRFUtil::HRFParams ParseCommandLine(int argc, char** argv);
-	static HRFUtil::HRFParams ParseFrameContent(ParamsPanel);
 private:
 	static void CheckCorrectParams(HRFUtil::HRFParams& params);
 	static uint32_t parse_u32(char* s);

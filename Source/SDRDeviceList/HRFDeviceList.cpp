@@ -33,3 +33,19 @@ std::vector<const char*> HRFDeviceList::GetSerialNumbers() const
 	}
 	return serial;
 }
+
+void HRFDeviceList::SetParamsBySerial(const char* serial, HRFUtil::HRFParams params)
+{
+	HRFDevice* targetDevice = nullptr;
+	for (auto device : m_hrfDeviceList)
+	{
+		if (device->GetSerialNumber() == serial)
+		{
+			targetDevice = device;
+		}
+	}
+	if (targetDevice == nullptr)
+		throw SDRException("No HackRF device with such serial number");
+
+	targetDevice->SetParams(params);
+}

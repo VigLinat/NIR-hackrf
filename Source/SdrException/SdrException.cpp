@@ -3,15 +3,20 @@
 
 SDRException::SDRException()
 {
-	m_result = HACKRF_SUCCESS;
+	m_message = "";
 }
 
 SDRException::SDRException(const hackrf_error result)
 {
-	m_result = result;
+	m_message = std::string(hackrf_error_name(result));
+}
+
+SDRException::SDRException(const std::string& message)
+{
+	m_message = message;
 }
 
 std::string SDRException::What() const
 {
-	return std::string(hackrf_error_name(m_result));
+	return m_message;
 }

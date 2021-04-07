@@ -6,11 +6,14 @@ HRFDevice::HRFDevice()
 {
 	m_device = nullptr;
 	m_serialNumber = nullptr;
+	m_transceiver = nullptr;
 }
 
 HRFDevice::HRFDevice(const char* serialNumber)
 {
 	m_device = nullptr;
+	m_transceiver = nullptr;
+
 	size_t len = strlen(serialNumber);
 	m_serialNumber = new char[len];
 	strcpy(m_serialNumber, serialNumber);
@@ -18,14 +21,18 @@ HRFDevice::HRFDevice(const char* serialNumber)
 
 HRFDevice::~HRFDevice()
 {
+	delete m_serialNumber;
 	OnExit();
 }
 
-// Send data from fileToSend using modulation mod 
-/*TODO : SendData inits HRFTransceiver and calls HRFTransceiver::Transfer*/
+void HRFDevice::SetParams(HRFUtil::HRFParams params)
+{
+	m_transceiver->SetParams(params);
+}
+
 void HRFDevice::SendData(HRFUtil::MODULATIONS mod)
 {
-	m_transceiver->Transfer(m_device);
+	m_transceiver->Transfer();
 }
 
 const char* HRFDevice::GetSerialNumber() const
@@ -33,94 +40,30 @@ const char* HRFDevice::GetSerialNumber() const
 	return m_serialNumber;
 }
 
-// Initialize hackrf device via libusb here
 void HRFDevice::Init()
 {
 	int result = 0;
+	
 	result = hackrf_open_by_serial(m_serialNumber, &m_device);
-	if ( result != HACKRF_SUCCESS )
-	{
-		std::cerr << "hackrf_open_by_serial() failed: ";
-		throw SDRException((hackrf_error)result);
-	}
-
-	std::cerr << "call hackrf_set_sample_rate("
-		<< m_params->sample_rate_hz << "Hz / "
-		<< static_cast<float>(m_params->sample_rate_hz / FREQ_ONE_MHZ)
-		<< " MHz)" << std::endl;
-
-	result = hackrf_set_sample_rate(m_device, m_params->sample_rate_hz);
-	
-	
-	if ( result != HACKRF_SUCCESS)
-	{
-		std::cerr << "hackrf_set_sample_rate() failed: ";
-		throw SDRException((hackrf_error)result);
-	}
-
-	if (m_params->baseband_filter_bw)
-	{
-		result = hackrf_set_baseband_filter_bandwidth(m_device, m_params->baseband_filter_bw_hz);
-		if (result != HACKRF_SUCCESS)
-		{
-			std::cerr << "hackrf_set_baseband_filter_bandwith() failed: ";
-		}
-		throw SDRException((hackrf_error)result);
-	}
-
-	std::cerr << "call hackrf_set_hw_sync_mode(" << m_params->hw_sync_enable << ")" << std::endl;
-	result = hackrf_set_hw_sync_mode(m_device, m_params->hw_sync_enable ? 1 : 0);
 	if (result != HACKRF_SUCCESS)
 	{
-		std::cerr << "hackrf_set_hw_sync_mode() failed: ";
 		throw SDRException((hackrf_error)result);
 	}
 
-	m_transceiver = new HRFTransceiver(m_params, m_params->filepath);
+	m_transceiver = new HRFTransceiver(m_device);
 }
 
-void HRFDevice::SetCmdLineParams(const HRFUtil::HRFParams& params)
+HRFTransceiver* HRFDevice::GetTransceiver() const
 {
-	m_params = std::make_shared<HRFUtil::HRFParams>(params);
-	m_filename = m_params->filepath;
-	std::cout << "path to file: " << m_params->filepath << std::endl;
+	return m_transceiver;
 }
 
 void HRFDevice::OnExit()
 {
-	delete m_transceiver;
-
-	if (m_serialNumber != nullptr)
-		delete m_serialNumber;
-
-	int result = 0;
-	if (m_device != nullptr) {
-		if (m_params->receive || m_params->receive_wav) {
-			result = hackrf_stop_rx(m_device);
-			if (result != HACKRF_SUCCESS) {
-				fprintf(stderr, "hackrf_stop_rx() failed: %s (%d)\n", hackrf_error_name((hackrf_error)result), result);
-			}
-			else {
-				std::cerr << "hackrf_stop_rx() done" << std::endl;
-			}
-		}
-
-		if (m_params->transmit || m_params->signalsource) {
-			result = hackrf_stop_tx(m_device);
-			if (result != HACKRF_SUCCESS) {
-				fprintf(stderr, "hackrf_stop_tx() failed: %s (%d)\n", hackrf_error_name((hackrf_error)result), result);
-			}
-			else {
-				fprintf(stderr, "hackrf_stop_tx() done\n");
-			}
-		}
-
-		result = hackrf_close(m_device);
-		if (result != HACKRF_SUCCESS) {
-			fprintf(stderr, "hackrf_close() failed: %s (%d)\n", hackrf_error_name((hackrf_error)result), result);
-		}
-		else {
-			fprintf(stderr, "hackrf_close() done\n");
-		}
+	m_transceiver->Stop();
+	int result = hackrf_close(m_device);
+	if (result != HACKRF_SUCCESS)
+	{
+		throw SDRException((hackrf_error)result);
 	}
 }

@@ -11,7 +11,7 @@ namespace HRFUtil {
 
 	const uint32_t HRF_SERIAL_NUMBER_LENGTH = 64;
 
-	enum MODULATIONS : uint16_t {
+	enum class MODULATIONS : uint16_t {
 		VSDR_MODULATION_PSK_2,
 		VSDR_MODULATION_PSK_4,
 		VSDR_MODULATION_QAM_8,
@@ -55,8 +55,6 @@ namespace HRFUtil {
 	{
 		char data[U64TOA_MAX_DIGIT + 1];
 	} t_u64toa;
-
-	
 
 	struct HRFParams
 	{
@@ -115,5 +113,6 @@ namespace HRFUtil {
 		uint32_t requested_mode_count = 0;
 
 		const char* filepath;
+		std::string filename;
 	};
 }

@@ -12,11 +12,16 @@ enum
 enum
 {
     ID_SETALL,
+    ID_STARTTX,
 	ID_DEVICELIST,
     ID_UPDATEDEVICE,
+};
+
+enum
+{
     ID_SETFILE,
     ID_SETFREQ,
-	ID_SETMODE,
+    ID_SETMODE,
     ID_SETLNA,
     ID_SETVGA,
     ID_SETTXVGA,
@@ -28,35 +33,37 @@ enum
     ID_RADIO_AMP,
 };
 
-struct frameContent
+typedef enum
 {
-    std::string filename;
-    uint64_t freq;
-    uint32_t lna;
-    uint32_t vga;
-    uint32_t txvga;
-};
+    ID_TX_MODE = 0,
+    ID_RX_MODE = 1,
+    ID_RX_WAV_MODE = 2
+} RXTXMode;
 
 class ParamsPanel :
     public wxPanel
 {
 public:
     ParamsPanel(wxWindow* parent);
-    frameContent GetContent() const;
-
+public:
+    wxString GetFrequency() const;
+    wxString GetFilename() const;
+    RXTXMode GetRXTXMode() const;
+    wxString GetTXVGA() const;
+    wxString GetLNA() const;
+    wxString GetVGA() const;
 private:
     wxWindow* parentFrame;
-    wxButton* updateButton;
 	wxRadioBox* modeSelection;
-    std::vector<wxButton*> buttonList;
     std::vector<std::pair<wxTextCtrl*, bool>> textList;
 
-    frameContent params;
-private:
-    void OnButtonClicked(wxCommandEvent& evt);
-    void OnTextCtrlClicked(wxMouseEvent& evt);
+    wxTextCtrl* filename;
+    wxTextCtrl* frequency;
+    wxTextCtrl* txvga;
+    
 
-    void CreateButtons();
+private:
+    void OnTextCtrlClicked(wxMouseEvent& evt);
     void CreateRadioButtons();
     void CreateTexts();
 };

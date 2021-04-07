@@ -41,7 +41,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
@@ -140,6 +140,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\Command\Command.cpp" />
+    <ClCompile Include="..\Command\SetParamsCommand.cpp" />
     <ClCompile Include="..\Command\UpdateListCommand.cpp" />
     <ClCompile Include="..\getopt\my_getopt.cpp" />
     <ClCompile Include="..\GUI\MainFrame.cpp" />
@@ -156,6 +157,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Command\Command.h" />
+    <ClInclude Include="..\Command\SetParamsCommand.h" />
     <ClInclude Include="..\Command\UpdateListCommand.h" />
     <ClInclude Include="..\getopt\my_getopt.h" />
     <ClInclude Include="..\GUI\MainFrame.h" />
