@@ -7,8 +7,8 @@ class HRFCmdParser
 {
 public:
 	static HRFUtil::HRFParams ParseCommandLine(int argc, char** argv);
-private:
 	static void CheckCorrectParams(HRFUtil::HRFParams& params);
+private:
 	static uint32_t parse_u32(char* s);
 	static uint64_t parse_u64(char* s);
 	static int64_t parse_frequency_i64(char* optarg, char* endptr);

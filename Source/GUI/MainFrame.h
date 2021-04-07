@@ -4,6 +4,7 @@
 #include "../SDRDevice/HRFDevice.h"
 #include "../SDRDeviceList/HRFDeviceList.h"
 #include "../SDRDeviceList/SDRDeviceList.h"
+#include "../SDRUtility/SDRUtility.h"
 #include "../Command/UpdateListCommand.h"
 #include "../Command/SetParamsCommand.h"
 

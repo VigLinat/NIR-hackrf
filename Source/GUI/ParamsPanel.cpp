@@ -9,6 +9,13 @@ ParamsPanel::ParamsPanel(wxWindow* parent)
 	CreateTexts();
 }
 
+ParamsPanel::ParamsPanel(wxWindow* parent, const wxPoint& point, const wxSize& size)
+	: wxPanel(parent, wxID_ANY, point, size)
+{
+	CreateRadioButtons();
+	CreateTexts();
+}
+
 wxString ParamsPanel::GetFrequency() const
 {
 	return frequency->GetLineText(0);
@@ -60,13 +67,13 @@ void ParamsPanel::OnTextCtrlClicked(wxMouseEvent& evt)
 void ParamsPanel::CreateRadioButtons()
 {
 	const wxString choices[] = { "Tx", "Rx", "Rx WAV" };
-	modeSelection = new wxRadioBox(this, ID_SETMODE, "Select Mode", wxPoint(10, 120), wxSize(100, 100), 2, choices);
+	modeSelection = new wxRadioBox(this, ID_SETMODE, "Select Mode", wxPoint(10, 70), wxSize(100, 100), 2, choices);
 }
 
 void ParamsPanel::CreateTexts()
 {
 
-	filename = new wxTextCtrl(this, ID_SETFILE, "Enter filename", wxPoint(10, 70), wxSize(250, 30));
-	frequency = new wxTextCtrl(this, ID_SETFREQ, "Enter frequency", wxPoint(10, 240), wxSize(150, 30));
-	txvga = new wxTextCtrl(this, ID_SETTXVGA, "Enter TX VGA", wxPoint(10, 290), wxSize(150, 30));
+	filename = new wxTextCtrl(this, ID_SETFILE, "Enter filename", wxPoint(10, 10), wxSize(250, 30));
+	frequency = new wxTextCtrl(this, ID_SETFREQ, "Enter frequency", wxPoint(10, 200), wxSize(150, 30));
+	txvga = new wxTextCtrl(this, ID_SETTXVGA, "Enter TX VGA", wxPoint(10, 260), wxSize(150, 30));
 }

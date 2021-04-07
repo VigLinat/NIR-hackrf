@@ -4,6 +4,6 @@
 class MyApp :
     public wxApp
 {
-	~MyApp();
     virtual bool OnInit();
+	int OnExit();
 };

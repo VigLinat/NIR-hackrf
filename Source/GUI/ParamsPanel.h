@@ -45,6 +45,7 @@ class ParamsPanel :
 {
 public:
     ParamsPanel(wxWindow* parent);
+	ParamsPanel(wxWindow* parent, const wxPoint& point, const wxSize& size);
 public:
     wxString GetFrequency() const;
     wxString GetFilename() const;

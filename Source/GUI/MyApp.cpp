@@ -10,10 +10,10 @@ bool MyApp::OnInit()
 	freopen("CONOUT$", "w+", stderr);
 
 	std::cerr << "Hello VisualSDR!" << std::endl;
-	
+
 	int result = 0;
 	result = hackrf_init();
-	if (result != HACKRF_SUCCESS) 
+	if (result != HACKRF_SUCCESS)
 	{
 		fprintf(stderr, "hackrf_init() failed: %s (%d)\n",
 			hackrf_error_name((hackrf_error)result), result);
@@ -25,12 +25,13 @@ bool MyApp::OnInit()
 	return true;
 }
 
-MyApp::~MyApp()
+int MyApp::OnExit()
 {
 	FreeConsole();
 	hackrf_exit();
 	fprintf(stderr, "hackrf_exit() done\n");
 	std::cerr << "exit" << std::endl;
+	return 0;
 }
 
 wxIMPLEMENT_APP(MyApp);

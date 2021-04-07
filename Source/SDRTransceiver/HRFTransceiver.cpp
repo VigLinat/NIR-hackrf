@@ -7,11 +7,20 @@ volatile uint32_t byte_count = 0;
 struct timeval time_start;
 struct timeval t_start;
 
+HRFUtil::HRFParams params;
+std::ifstream file;
+char* read_buffer = nullptr;
+
 bool do_exit = false;
 
 HRFTransceiver::HRFTransceiver(hackrf_device* device)
 {
 	m_device = device;
+}
+
+HRFTransceiver::~HRFTransceiver()
+{
+	Stop();
 }
 
 void HRFTransceiver::Stop()
@@ -38,6 +47,8 @@ void HRFTransceiver::Stop()
 	}
 }
 
+int tx_callback(hackrf_transfer*);
+
 void HRFTransceiver::Transfer()
 {
 	int result = 0;
@@ -48,56 +59,10 @@ void HRFTransceiver::Transfer()
 
 	result = hackrf_set_txvga_gain(m_device, m_params.txvga_gain);
 
-	static HRFUtil::HRFParams params = m_params;
-	static std::ifstream file;
-	file.open(m_params.filename);
-
-	// originally, EnableParams were executed after hackrf_start_tx
-	EnableParamsForRXTX(m_device);
-
-	static char* read_buffer = nullptr;
-	result |= hackrf_start_tx(
-		m_device, [](hackrf_transfer* transfer) -> int
-	{
-		if (file.is_open() && file.good() && !file.eof())
-		{
-			size_t buffer_length = transfer->valid_length;
-			size_t bits_to_read = buffer_length / 8;
-			byte_count += bits_to_read;
-
-			read_buffer = (char*)malloc(bits_to_read);
-			file.read(read_buffer, bits_to_read);
-
-			size_t bits_read = file.gcount();
-			make_psk4_buffer(transfer->buffer, read_buffer, bits_read);
-			if (bits_read != bits_to_read)
-			{
-				if (params.repeat)
-				{
-					size_t extra_bits = bits_to_read - bits_read;
-					file.seekg(0);
-					file.read(read_buffer + bits_read, extra_bits);
-					make_psk4_buffer(transfer->buffer + bits_read * 8, read_buffer + bits_read, extra_bits);
-					return 0;
-				}
-				else
-				{
-					std::cout << "End of file reached" << std::endl;
-					return -1;
-				}
-			}
-			else
-			{
-				return 0;
-			}
-		}
-		else
-		{
-			return -1;
-		}
-	},
-		NULL
-	);
+	params = m_params;
+	file.open(params.filename, std::ios_base::binary | std::ios_base::in);
+	result |= hackrf_start_tx(m_device, tx_callback, NULL);
+	EnableParamsForRXTX();
 
 	gettimeofday(&t_start, NULL);
 	gettimeofday(&time_start, NULL);
@@ -163,6 +128,54 @@ void HRFTransceiver::Transfer()
 	gettimeofday(&t_end, NULL);
 	time_diff = TimevalDiff(&t_end, &t_start);
 	fprintf(stderr, "Total time: %5.5f s\n", time_diff);
+	Stop();
+}
+
+int tx_callback(hackrf_transfer* transfer)
+{
+	if (file.is_open() && file.good() && !file.eof())
+	{
+		size_t buffer_length = transfer->valid_length;
+		size_t bits_to_read = buffer_length / 8;
+		byte_count += bits_to_read;
+
+		read_buffer = (char*)malloc(bits_to_read);
+		file.read(read_buffer, bits_to_read);
+
+		size_t bits_read = file.gcount();
+		HRFTransceiver::make_psk4_buffer(transfer->buffer, read_buffer, bits_read);
+		if (bits_read != bits_to_read)
+		{
+			if (params.repeat)
+			{
+				size_t extra_bits = bits_to_read - bits_read;
+				file.seekg(0);
+				file.read(read_buffer + bits_read, extra_bits);
+				HRFTransceiver::make_psk4_buffer(transfer->buffer + bits_read * 8, read_buffer + bits_read, extra_bits);
+				return 0;
+			}
+			else
+			{
+				std::cout << "End of file reached" << std::endl;
+				return -1;
+			}
+		}
+		else
+		{
+			return 0;
+		}
+	}
+	else
+	{
+		return -1;
+	}
+}
+
+void HRFTransceiver::SetParams(const HRFUtil::HRFParams params)
+{
+	m_params = params;
+	HRFCmdParser::CheckCorrectParams(m_params);
+	InitTransceiver();
 }
 
 int HRFTransceiver::GetStreamingStatus() const
@@ -171,30 +184,11 @@ int HRFTransceiver::GetStreamingStatus() const
 }
 
 
-void HRFTransceiver::SetParams(const HRFUtil::HRFParams params)
-{
-	m_params = params;
-}
-
-void HRFTransceiver::make_psk4_buffer(uint8_t* buffer, char* data, size_t size)
-{
-	for (int i = 0; i < size; i++)
-	{
-		uint8_t modulation_symbol;
-		for (int j = 7; j >= 0; j--)
-		{
-			modulation_symbol = (data[i] & (1 << j)) != 0 ? 127 : 0;
-			buffer[i * 8 + (7 - j)] = modulation_symbol;
-		}
-	}
-}
-
 void HRFTransceiver::InitTransceiver()
 {
 	int result = 0;
 
 	result = hackrf_set_sample_rate(m_device, m_params.sample_rate_hz);
-
 	if (result != HACKRF_SUCCESS)
 	{
 		throw SDRException((hackrf_error)result);
@@ -216,13 +210,12 @@ void HRFTransceiver::InitTransceiver()
 	}
 }
 
-void HRFTransceiver::EnableParamsForRXTX(hackrf_device* device)
+void HRFTransceiver::EnableParamsForRXTX()
 {
 	int result = 0;
-
 	if (m_params.automatic_tuning) 
 	{
-		result |= hackrf_set_freq(device, m_params.freq_hz);
+		result |= hackrf_set_freq(m_device, m_params.freq_hz);
 		if (result != HACKRF_SUCCESS)
 		{
 			throw SDRException((hackrf_error)result);
@@ -231,7 +224,7 @@ void HRFTransceiver::EnableParamsForRXTX(hackrf_device* device)
 	else 
 	{
 		result |= hackrf_set_freq_explicit(
-			device, 
+			m_device, 
 			m_params.if_freq_hz, m_params.lo_freq_hz,
 			(rf_path_filter)m_params.image_reject_selection
 		);
@@ -243,7 +236,7 @@ void HRFTransceiver::EnableParamsForRXTX(hackrf_device* device)
 
 	if (m_params.amp) 
 	{
-		result |= hackrf_set_amp_enable(device, (uint8_t)m_params.amp_enable);
+		result |= hackrf_set_amp_enable(m_device, (uint8_t)m_params.amp_enable);
 		if (result != HACKRF_SUCCESS)
 		{
 			throw SDRException((hackrf_error)result);
@@ -252,10 +245,23 @@ void HRFTransceiver::EnableParamsForRXTX(hackrf_device* device)
 
 	if (m_params.antenna) 
 	{
-		result |= hackrf_set_antenna_enable(device, (uint8_t)m_params.antenna_enable);
+		result |= hackrf_set_antenna_enable(m_device, (uint8_t)m_params.antenna_enable);
 		if (result != HACKRF_SUCCESS)
 		{
 			throw SDRException((hackrf_error)result);
+		}
+	}
+}
+
+void HRFTransceiver::make_psk4_buffer(uint8_t* buffer, char* data, size_t size)
+{
+	for (int i = 0; i < size; i++)
+	{
+		uint8_t modulation_symbol;
+		for (int j = 7; j >= 0; j--)
+		{
+			modulation_symbol = (data[i] & (1 << j)) != 0 ? 127 : 0;
+			buffer[i * 8 + (7 - j)] = modulation_symbol;
 		}
 	}
 }

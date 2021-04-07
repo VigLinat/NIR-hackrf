@@ -7,8 +7,8 @@ MainFrame::MainFrame()
 {
 	m_deviceChoiceList = new wxChoice(this, ID_DEVICELIST, wxPoint(10, 10), wxSize(250, 30));
 	m_updateButton = new wxButton(this, ID_UPDATEDEVICE, "Update", wxPoint(270, 10), wxSize(100, 30));
-	m_setParams = new wxButton(this, ID_SETALL, "Set Params", wxPoint(100, 370), wxSize(150, 50));
-	m_startTX = new wxButton(this, ID_STARTTX, "Start TX", wxPoint(100, 450), wxSize(150, 50));
+	m_setParams = new wxButton(this, ID_SETALL, "Set Params", wxPoint(100, 440), wxSize(150, 50));
+	m_startTX = new wxButton(this, ID_STARTTX, "Start TX", wxPoint(100, 500), wxSize(150, 50));
 
 	m_updateButton->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &MainFrame::UpdateDeviceList, this);
 	m_setParams->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &MainFrame::OnSetParams, this);
@@ -37,19 +37,40 @@ void MainFrame::UpdateDeviceList(wxCommandEvent& evt)
 			size_t maxn = strlen(device);
 			std::string last4digits = &device[maxn - 4];
 			m_deviceChoiceList->AppendString(std::string("HackRF: ") + last4digits);
-			m_paramsPanel.push_back(new ParamsPanel(this));
+			m_paramsPanel.push_back(new ParamsPanel(this, wxPoint(10, 50), wxSize(450, 320)));
 		}
 	}
 }
 
 void MainFrame::OnStartTX(wxCommandEvent& evt)
 {
+	int currentSelection = m_deviceChoiceList->GetCurrentSelection();
+	if (currentSelection == wxNOT_FOUND)
+	{
+		wxMessageBox("Please select the HackRF board first");
+		return;
+	}
+	const char* serial = m_serialNumbers[currentSelection];
 
+	HRFDevice* targetDevice = m_deviceList->GetDeviceBySerial(serial);
+	try
+	{
+		targetDevice->SendData(HRFUtil::MODULATIONS::VSDR_MODULATION_PSK_4);
+	}
+	catch (const SDRException& e)
+	{
+		wxMessageBox(e.What());
+	}
 }
 
 void MainFrame::OnSetParams(wxCommandEvent& evt) 
 {
-	int currentSelection = m_deviceChoiceList->GetSelection();
+	int currentSelection = m_deviceChoiceList->GetCurrentSelection();
+	if (currentSelection == wxNOT_FOUND)
+	{
+		wxMessageBox("Please select the HackRF board first");
+		return;
+	}
 	const char* serial = m_serialNumbers[currentSelection];
 
 	ParamsPanel* currentPanel = m_paramsPanel[currentSelection];
@@ -68,12 +89,31 @@ void MainFrame::OnSetParams(wxCommandEvent& evt)
 		break;
 	}
 	unsigned long temp = 0;
-	currentPanel->GetFrequency().ToLongLong(&params.freq_hz);
+	
+	int result = 0;
 	params.filename = currentPanel->GetFilename().ToStdString();
-	currentPanel->GetTXVGA().ToULong(&temp);
+	
+	result = currentPanel->GetFrequency().ToLongLong(&params.freq_hz);
+	if (!result)
+	{
+		wxMessageBox("Pleae specify correct frequency");
+		return;
+	}
+	result = currentPanel->GetTXVGA().ToULong(&temp);
+	if (!result)
+	{
+		wxMessageBox("Pleae specify correct amplification");
+		return;
+	}
 	params.txvga_gain = static_cast<uint32_t>(temp);
-
-	m_deviceList->SetParamsBySerial(serial, params);
+	try 
+	{
+		m_deviceList->SetParamsBySerial(serial, params);
+	}
+	catch (const SDRException& e)
+	{
+		wxMessageBox(e.What());
+	}
 }
 
 

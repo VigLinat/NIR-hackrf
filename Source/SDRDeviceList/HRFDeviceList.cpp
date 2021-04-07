@@ -17,9 +17,23 @@ void HRFDeviceList::UpdateList()
 		for (int i = 0; i < list->devicecount; i++)
 		{
 			m_hrfDeviceList.push_back(new HRFDevice(list->serial_numbers[i]));
+			m_hrfDeviceList[i]->Init();
 		}
 		hackrf_device_list_free(list);
 	}
+}
+
+HRFDevice* HRFDeviceList::GetDeviceBySerial(const char* serial)
+{
+	HRFDevice* targetDevice = FindDeviceBySerial(serial);
+	return targetDevice;
+}
+
+void HRFDeviceList::SetParamsBySerial(const char* serial, HRFUtil::HRFParams params)
+{
+	HRFDevice* targetDevice = FindDeviceBySerial(serial);
+
+	targetDevice->SetParams(params);
 }
 
 std::vector<const char*> HRFDeviceList::GetSerialNumbers() const
@@ -34,7 +48,7 @@ std::vector<const char*> HRFDeviceList::GetSerialNumbers() const
 	return serial;
 }
 
-void HRFDeviceList::SetParamsBySerial(const char* serial, HRFUtil::HRFParams params)
+HRFDevice* HRFDeviceList::FindDeviceBySerial(const char* serial) const
 {
 	HRFDevice* targetDevice = nullptr;
 	for (auto device : m_hrfDeviceList)
@@ -46,6 +60,5 @@ void HRFDeviceList::SetParamsBySerial(const char* serial, HRFUtil::HRFParams par
 	}
 	if (targetDevice == nullptr)
 		throw SDRException("No HackRF device with such serial number");
-
-	targetDevice->SetParams(params);
+	return targetDevice;
 }

@@ -22,8 +22,23 @@ HRFDevice::HRFDevice(const char* serialNumber)
 HRFDevice::~HRFDevice()
 {
 	delete m_serialNumber;
+	delete m_transceiver;
 	OnExit();
 }
+
+void HRFDevice::Init()
+{
+	int result = 0;
+
+	result = hackrf_open_by_serial(m_serialNumber, &m_device);
+	if (result != HACKRF_SUCCESS)
+	{
+		throw SDRException((hackrf_error)result);
+	}
+
+	m_transceiver = new HRFTransceiver(m_device);
+}
+
 
 void HRFDevice::SetParams(HRFUtil::HRFParams params)
 {
@@ -38,19 +53,6 @@ void HRFDevice::SendData(HRFUtil::MODULATIONS mod)
 const char* HRFDevice::GetSerialNumber() const
 {
 	return m_serialNumber;
-}
-
-void HRFDevice::Init()
-{
-	int result = 0;
-	
-	result = hackrf_open_by_serial(m_serialNumber, &m_device);
-	if (result != HACKRF_SUCCESS)
-	{
-		throw SDRException((hackrf_error)result);
-	}
-
-	m_transceiver = new HRFTransceiver(m_device);
 }
 
 HRFTransceiver* HRFDevice::GetTransceiver() const
