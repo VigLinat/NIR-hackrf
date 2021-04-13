@@ -148,6 +148,8 @@
     <ClCompile Include="..\GUI\MyApp.cpp" />
     <ClCompile Include="..\hackrf\hackrf.c" />
     <ClCompile Include="..\HRFCmdParser\HRFCmdParser.cpp" />
+    <ClCompile Include="..\Logger\ConsoleLogger.cpp" />
+    <ClCompile Include="..\Logger\Logger.cpp" />
     <ClCompile Include="..\SDRDeviceList\HRFDeviceList.cpp" />
     <ClCompile Include="..\SDRDevice\HRFDevice.cpp" />
     <ClCompile Include="..\SDRDevice\SdrDevice.cpp" />
@@ -165,6 +167,8 @@
     <ClInclude Include="..\GUI\MyApp.h" />
     <ClInclude Include="..\hackrf\hackrf.h" />
     <ClInclude Include="..\HRFCmdParser\HRFCmdParser.h" />
+    <ClInclude Include="..\Logger\ConsoleLogger.h" />
+    <ClInclude Include="..\Logger\Logger.h" />
     <ClInclude Include="..\SDRDeviceList\HRFDeviceList.h" />
     <ClInclude Include="..\SDRDeviceList\SDRDeviceList.h" />
     <ClInclude Include="..\SDRDevice\HRFDevice.h" />
