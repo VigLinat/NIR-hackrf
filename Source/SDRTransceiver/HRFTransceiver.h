@@ -23,6 +23,11 @@ private:
 	void EnableParamsForRXTX();
 	void InitTransceiver();
 
+	void StartConsoleLogger();
+
+	void ConsoleLogger();
+	void TransferMonitor();
+
 	hackrf_device* m_device;
 	HRFUtil::HRFParams m_params;
 public:

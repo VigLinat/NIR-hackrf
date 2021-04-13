@@ -3,6 +3,8 @@
 #include "../HRFCmdParser/HRFCmdParser.h"
 #include "../SDRException/SDRException.h"
 
+#include <thread>
+
 volatile uint32_t byte_count = 0;
 struct timeval time_start;
 struct timeval t_start;
@@ -54,9 +56,6 @@ void HRFTransceiver::Transfer()
 	int result = 0;
 	int exit_code = 0;
 
-	struct timeval t_end;
-	float time_diff;
-
 	result = hackrf_set_txvga_gain(m_device, m_params.txvga_gain);
 
 	params = m_params;
@@ -64,71 +63,11 @@ void HRFTransceiver::Transfer()
 	result |= hackrf_start_tx(m_device, tx_callback, NULL);
 	EnableParamsForRXTX();
 
-	gettimeofday(&t_start, NULL);
-	gettimeofday(&time_start, NULL);
+	std::thread consoleLoggerThread(&HRFTransceiver::ConsoleLogger, this);
+	std::thread transferMonitorThread(&HRFTransceiver::TransferMonitor, this);
 
-	fprintf(stderr, "Stop with Ctrl-C\n");
-	while ((hackrf_is_streaming(m_device) == HACKRF_TRUE) &&
-		(do_exit == false))
-	{
-		uint32_t byte_count_now;
-		struct timeval time_now;
-		float rate = 0;
-		float time_difference = 0;
-		if (m_params.stream_size > 0) 
-		{
-
-		}
-		else 
-		{
-			sleep(1);
-			gettimeofday(&time_now, NULL);
-			byte_count_now = byte_count;
-			byte_count = 0;
-
-			time_difference = TimevalDiff(&time_now, &time_start);
-			rate = (float)byte_count_now / time_difference;
-			if (byte_count_now == 0 && m_params.hw_sync == true && m_params.hw_sync_enable != 0) 
-			{
-				fprintf(stderr, "Waiting for sync...\n");
-			}
-			else 
-			{
-				fprintf(stderr, "%4.2f MiB / %5.3f sec = %4.2f MiB/second\n",
-					(byte_count_now / 1e6f), time_difference, (rate / 1e6f));
-			}
-
-			time_start = time_now;
-
-			if (byte_count_now == 0 && (m_params.hw_sync == false || m_params.hw_sync_enable == 0)) 
-			{
-				exit_code = EXIT_FAILURE;
-				fprintf(stderr, "\nCouldn't transfer any bytes for one second.\n");
-				break;
-			}
-		}
-	}
-
-	result = hackrf_is_streaming(m_device);
-	
-	if (do_exit)
-	{
-		fprintf(stderr, "\nExiting...\n");
-	}
-	else 
-	{
-		fprintf(stderr, "\nExiting... hackrf_is_streaming() result: %s (%d)\n", hackrf_error_name((hackrf_error)result), result);
-	}
-
-	if (read_buffer != nullptr)
-	{
-		free(read_buffer);
-	}
-
-	gettimeofday(&t_end, NULL);
-	time_diff = TimevalDiff(&t_end, &t_start);
-	fprintf(stderr, "Total time: %5.5f s\n", time_diff);
-	Stop();
+	consoleLoggerThread.join();
+	transferMonitorThread.join();
 }
 
 int tx_callback(hackrf_transfer* transfer)
@@ -137,7 +76,8 @@ int tx_callback(hackrf_transfer* transfer)
 	{
 		size_t buffer_length = transfer->valid_length;
 		size_t bits_to_read = buffer_length / 8;
-		byte_count += bits_to_read;
+		byte_count += bits_to_read; // since each inforamtion bit is transmitted as 1 byte,
+									// number of sent bytes is equal to number of information bits
 
 		read_buffer = (char*)malloc(bits_to_read);
 		file.read(read_buffer, bits_to_read);
@@ -264,6 +204,91 @@ void HRFTransceiver::make_psk4_buffer(uint8_t* buffer, char* data, size_t size)
 			buffer[i * 8 + (7 - j)] = modulation_symbol;
 		}
 	}
+}
+
+void HRFTransceiver::TransferMonitor()
+{
+	while ((hackrf_is_streaming(m_device) == HACKRF_TRUE) &&
+		(do_exit == false))
+	{
+
+	}
+
+	Stop();
+}
+
+void HRFTransceiver::ConsoleLogger()
+{
+	int result = 0;
+	int exit_code = 0;
+
+	struct timeval t_end;
+	float time_diff;
+
+	gettimeofday(&t_start, NULL);
+	gettimeofday(&time_start, NULL);
+
+	fprintf(stderr, "Stop with Ctrl-C\n");
+	while ((hackrf_is_streaming(m_device) == HACKRF_TRUE) &&
+		(do_exit == false))
+	{
+		uint32_t byte_count_now;
+		struct timeval time_now;
+		float rate = 0;
+		float time_difference = 0;
+		if (m_params.stream_size > 0)
+		{
+
+		}
+		else
+		{
+			sleep(1);
+			gettimeofday(&time_now, NULL);
+			byte_count_now = byte_count;
+			byte_count = 0;
+
+			time_difference = TimevalDiff(&time_now, &time_start);
+			rate = (float)byte_count_now / time_difference;
+			if (byte_count_now == 0 && m_params.hw_sync == true && m_params.hw_sync_enable != 0)
+			{
+				fprintf(stderr, "Waiting for sync...\n");
+			}
+			else
+			{
+				fprintf(stderr, "%4.2f MiB / %5.3f sec = %4.2f MiB/second\n",
+					(byte_count_now / 1e6f), time_difference, (rate / 1e6f));
+			}
+
+			time_start = time_now;
+
+			if (byte_count_now == 0 && (m_params.hw_sync == false || m_params.hw_sync_enable == 0))
+			{
+				exit_code = EXIT_FAILURE;
+				fprintf(stderr, "\nCouldn't transfer any bytes for one second.\n");
+				break;
+			}
+		}
+	}
+
+	result = hackrf_is_streaming(m_device);
+
+	if (do_exit)
+	{
+		fprintf(stderr, "\nExiting...\n");
+	}
+	else
+	{
+		fprintf(stderr, "\nExiting... hackrf_is_streaming() result: %s (%d)\n", hackrf_error_name((hackrf_error)result), result);
+	}
+
+	if (read_buffer != nullptr)
+	{
+		free(read_buffer);
+	}
+
+	gettimeofday(&t_end, NULL);
+	time_diff = TimevalDiff(&t_end, &t_start);
+	fprintf(stderr, "Total time: %5.5f s\n", time_diff);
 }
 
 int HRFTransceiver::gettimeofday(struct timeval* tv, void* ignored)
