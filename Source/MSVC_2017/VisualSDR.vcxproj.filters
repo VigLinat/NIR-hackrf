@@ -60,12 +60,6 @@
     <ClCompile Include="..\Command\SetParamsCommand.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="..\Logger\Logger.cpp">
-      <Filter>Исходные файлы</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Logger\ConsoleLogger.cpp">
-      <Filter>Исходные файлы</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\SDRDevice\HRFDevice.h">
@@ -120,12 +114,6 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="..\Command\SetParamsCommand.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Logger\Logger.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Logger\ConsoleLogger.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>

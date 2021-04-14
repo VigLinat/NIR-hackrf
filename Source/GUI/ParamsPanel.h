@@ -13,6 +13,7 @@ enum
 {
     ID_SETALL,
     ID_STARTTX,
+    ID_STOPTX,
 	ID_DEVICELIST,
     ID_UPDATEDEVICE,
 };

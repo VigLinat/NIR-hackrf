@@ -16,6 +16,7 @@ public:
 	void Init();
 	//send data from fileToSend using modulation mod
 	void SendData(HRFUtil::MODULATIONS mod);
+	void StopTX();
 	const char* GetSerialNumber() const;
 	void SetParams(HRFUtil::HRFParams params);
 	HRFTransceiver* GetTransceiver() const;

@@ -39,6 +39,10 @@ void HRFDevice::Init()
 	m_transceiver = new HRFTransceiver(m_device);
 }
 
+void HRFDevice::StopTX()
+{
+	m_transceiver->Stop();
+}
 
 void HRFDevice::SetParams(HRFUtil::HRFParams params)
 {

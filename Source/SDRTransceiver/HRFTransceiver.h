@@ -23,8 +23,6 @@ private:
 	void EnableParamsForRXTX();
 	void InitTransceiver();
 
-	void StartConsoleLogger();
-
 	void ConsoleLogger();
 	void TransferMonitor();
 

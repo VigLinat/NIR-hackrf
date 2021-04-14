@@ -9,12 +9,16 @@ MainFrame::MainFrame()
 	m_updateButton = new wxButton(this, ID_UPDATEDEVICE, "Update", wxPoint(270, 10), wxSize(100, 30));
 	m_setParams = new wxButton(this, ID_SETALL, "Set Params", wxPoint(100, 440), wxSize(150, 50));
 	m_startTX = new wxButton(this, ID_STARTTX, "Start TX", wxPoint(100, 500), wxSize(150, 50));
+	m_stopTX = new wxButton(this, ID_STOPTX, "Stop TX", wxPoint(280, 500), wxSize(150, 50));
 
 	m_updateButton->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &MainFrame::UpdateDeviceList, this);
 	m_setParams->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &MainFrame::OnSetParams, this);
 	m_startTX->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &MainFrame::OnStartTX, this);
+	m_stopTX->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &MainFrame::OnStopTX, this);
 	//this->Bind(wxEVT_CLOSE_WINDOW, &MainFrame::OnExit);
 	m_deviceList = new HRFDeviceList;
+
+	currentTXDevice = nullptr;
 }
 
 void MainFrame::UpdateDeviceList(wxCommandEvent& evt)
@@ -44,22 +48,33 @@ void MainFrame::UpdateDeviceList(wxCommandEvent& evt)
 
 void MainFrame::OnStartTX(wxCommandEvent& evt)
 {
-	int currentSelection = m_deviceChoiceList->GetCurrentSelection();
-	if (currentSelection == wxNOT_FOUND)
+	if (currentTXDevice == nullptr)
 	{
-		wxMessageBox("Please select the HackRF board first");
-		return;
-	}
-	const char* serial = m_serialNumbers[currentSelection];
+		int currentSelection = m_deviceChoiceList->GetCurrentSelection();
+		if (currentSelection == wxNOT_FOUND)
+		{
+			wxMessageBox("Please select the HackRF board first");
+		}
+		const char* serial = m_serialNumbers[currentSelection];
 
-	HRFDevice* targetDevice = m_deviceList->GetDeviceBySerial(serial);
-	try
-	{
+		HRFDevice* targetDevice = m_deviceList->GetDeviceBySerial(serial);
+
 		targetDevice->SendData(HRFUtil::MODULATIONS::VSDR_MODULATION_PSK_4);
+		currentTXDevice = targetDevice;
 	}
-	catch (const SDRException& e)
+	else
 	{
-		wxMessageBox(e.What());
+		wxMessageBox("Only 1 HackRF board can transmit at time!");
+	}
+
+}
+
+void MainFrame::OnStopTX(wxCommandEvent& evt)
+{
+	if (currentTXDevice != nullptr)
+	{
+		currentTXDevice->StopTX();
+		currentTXDevice = nullptr;
 	}
 }
 
@@ -71,7 +86,8 @@ void MainFrame::OnSetParams(wxCommandEvent& evt)
 		wxMessageBox("Please select the HackRF board first");
 		return;
 	}
-	const char* serial = m_serialNumbers[currentSelection];
+	const char* serial = m_serialNumbers[currentSelection];	
+
 
 	ParamsPanel* currentPanel = m_paramsPanel[currentSelection];
 	HRFUtil::HRFParams params;
@@ -115,7 +131,6 @@ void MainFrame::OnSetParams(wxCommandEvent& evt)
 		wxMessageBox(e.What());
 	}
 }
-
 
 void MainFrame::OnExit(wxCloseEvent& evt)
 {
