@@ -29,7 +29,8 @@ private:
 	hackrf_device* m_device;
 	HRFUtil::HRFParams m_params;
 public:
-	static void make_psk4_buffer(uint8_t* buffer, char* data, size_t size);
+	static void make_qam4_buffer(uint8_t* buffer, char* data, size_t size);
+	static void make_qam16_buffer(uint8_t* buffer, char* data, size_t size);
 private:
 	static int gettimeofday(struct timeval* tv, void* ignored);
 	static float TimevalDiff(const struct timeval* a, const struct timeval* b);

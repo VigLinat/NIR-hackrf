@@ -17,7 +17,7 @@ void HRFDeviceList::UpdateList()
 		for (int i = 0; i < list->devicecount; i++)
 		{
 			m_hrfDeviceList.push_back(new HRFDevice(list->serial_numbers[i]));
-			m_hrfDeviceList[i]->Init();
+			// m_hrfDeviceList[i]->Init();
 		}
 		hackrf_device_list_free(list);
 	}

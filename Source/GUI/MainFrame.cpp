@@ -56,7 +56,6 @@ void MainFrame::OnStartTX(wxCommandEvent& evt)
 			wxMessageBox("Please select the HackRF board first");
 		}
 		const char* serial = m_serialNumbers[currentSelection];
-
 		HRFDevice* targetDevice = m_deviceList->GetDeviceBySerial(serial);
 
 		targetDevice->SendData(HRFUtil::MODULATIONS::VSDR_MODULATION_PSK_4);
@@ -73,7 +72,14 @@ void MainFrame::OnStopTX(wxCommandEvent& evt)
 {
 	if (currentTXDevice != nullptr)
 	{
-		currentTXDevice->StopTX();
+		try 
+		{
+			currentTXDevice->StopTX();		
+		}
+		catch (const SDRException& e)
+		{
+			wxMessageBox(e.What());
+		}
 		currentTXDevice = nullptr;
 	}
 }
@@ -87,8 +93,8 @@ void MainFrame::OnSetParams(wxCommandEvent& evt)
 		return;
 	}
 	const char* serial = m_serialNumbers[currentSelection];	
-
-
+	HRFDevice* targetDevice = m_deviceList->GetDeviceBySerial(serial);
+	targetDevice->Init();
 	ParamsPanel* currentPanel = m_paramsPanel[currentSelection];
 	HRFUtil::HRFParams params;
 
