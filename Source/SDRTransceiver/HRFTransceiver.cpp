@@ -160,6 +160,9 @@ int tx_callback_qam4(hackrf_transfer* transfer)
 void HRFTransceiver::SetParams(const HRFUtil::HRFParams params)
 {
 	m_params = params;
+	std::cerr << "frequency: " << m_params.freq_hz << " (" << m_params.freq_hz / (double) 1000000 <<" MHz"<< std::endl
+		<< "tx gain: " << m_params.txvga_gain << std::endl
+		<< "sample rate: " << m_params.sample_rate_hz << std::endl;
 	HRFCmdParser::CheckCorrectParams(m_params);
 	InitTransceiver();
 }

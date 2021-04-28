@@ -236,7 +236,8 @@ void HRFCmdParser::CheckCorrectParams(HRFUtil::HRFParams& params)
 			throw SDRException((hackrf_error)EXIT_FAILURE);// return EXIT_FAILURE;
 		}
 	}
-	else {
+	else 
+	{
 		/* Use default freq */
 		params.freq_hz = DEFAULT_FREQ_HZ;
 		params.automatic_tuning = true;
