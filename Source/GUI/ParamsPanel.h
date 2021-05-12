@@ -6,11 +6,6 @@
 
 enum
 {
-    ID_Hello = 1,
-};
-
-enum
-{
     ID_SETALL,
     ID_STARTTX,
     ID_STOPTX,
@@ -21,6 +16,7 @@ enum
 enum
 {
     ID_SETFILE,
+	ID_SETSAMPLERATE,
     ID_SETFREQ,
     ID_SETMODE,
     ID_SETLNA,
@@ -51,6 +47,7 @@ public:
     wxString GetFrequency() const;
     wxString GetFilename() const;
     RXTXMode GetRXTXMode() const;
+	wxString GetSampleRate() const;
     wxString GetTXVGA() const;
     wxString GetLNA() const;
     wxString GetVGA() const;
@@ -58,10 +55,11 @@ private:
     wxWindow* parentFrame;
 	wxRadioBox* modeSelection;
     std::vector<std::pair<wxTextCtrl*, bool>> textList;
-
+	
     wxTextCtrl* filename;
     wxTextCtrl* frequency;
-    wxTextCtrl* txvga;
+	wxTextCtrl* sampleRate;
+	wxTextCtrl* txvga;
     
 
 private:

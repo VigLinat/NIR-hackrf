@@ -36,6 +36,11 @@ wxString ParamsPanel::GetTXVGA() const
 	return txvga->GetLineText(0);
 }
 
+wxString ParamsPanel::GetSampleRate() const
+{
+	return sampleRate->GetLineText(0);
+}
+
 wxString ParamsPanel::GetLNA() const
 {
 	// default value is 20
@@ -76,4 +81,5 @@ void ParamsPanel::CreateTexts()
 	filename = new wxTextCtrl(this, ID_SETFILE, "Enter filename", wxPoint(10, 10), wxSize(250, 30));
 	frequency = new wxTextCtrl(this, ID_SETFREQ, "Enter frequency", wxPoint(10, 200), wxSize(150, 30));
 	txvga = new wxTextCtrl(this, ID_SETTXVGA, "Enter TX VGA", wxPoint(10, 260), wxSize(150, 30));
+	sampleRate = new wxTextCtrl(this, ID_SETSAMPLERATE, "Enter bandwidth (defaulut = 10 MHz)", wxPoint(10, 320), wxSize(150, 30));
 }

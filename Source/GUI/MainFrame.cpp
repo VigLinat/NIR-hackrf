@@ -41,7 +41,7 @@ void MainFrame::UpdateDeviceList(wxCommandEvent& evt)
 			size_t maxn = strlen(device);
 			std::string last4digits = &device[maxn - 4];
 			m_deviceChoiceList->AppendString(std::string("HackRF: ") + last4digits);
-			m_paramsPanel.push_back(new ParamsPanel(this, wxPoint(10, 50), wxSize(450, 320)));
+			m_paramsPanel.push_back(new ParamsPanel(this, wxPoint(10, 50), wxSize(450, 350)));
 		}
 	}
 }
@@ -128,10 +128,22 @@ void MainFrame::OnSetParams(wxCommandEvent& evt)
 		return;
 	}
 	params.txvga_gain = static_cast<uint32_t>(temp);
+
+	result = currentPanel->GetSampleRate().ToULong(&temp);
+	if (!result)
+	{
+		params.sample_rate = false; // using default value
+	}
+	else
+	{
+		params.sample_rate_hz = temp;
+		params.sample_rate = true;
+	}
 	try 
 	{
 		m_deviceList->SetParamsBySerial(serial, params);
 	}
+
 	catch (const SDRException& e)
 	{
 		wxMessageBox(e.What());
