@@ -14,14 +14,17 @@ std::ifstream file;
 char* read_buffer = nullptr;
 
 bool do_exit = false;
+FILE* qamLogFile;
 
 HRFTransceiver::HRFTransceiver(hackrf_device* device)
 {
 	m_device = device;
+	qamLogFile = fopen("QAM_LOG.txt", "wb");
 }
 
 HRFTransceiver::~HRFTransceiver()
 {
+	fclose(qamLogFile);
 	Stop();
 }
 
@@ -67,6 +70,7 @@ void HRFTransceiver::Transfer()
 	params = m_params;
 	file.open(params.filename, std::ios_base::binary | std::ios_base::in);
 	result |= hackrf_start_tx(m_device, tx_callback_qam16, NULL);
+
 	EnableParamsForRXTX();
 
 	std::thread consoleLoggerThread(&HRFTransceiver::ConsoleLogger, this);
@@ -89,6 +93,7 @@ int tx_callback_qam16(hackrf_transfer* transfer)
 
 		size_t bits_read = file.gcount();
 		HRFTransceiver::make_qam16_buffer(transfer->buffer, read_buffer, bits_read);
+
 		if (bits_read != bits_to_read)
 		{
 			if (params.repeat)
@@ -130,6 +135,7 @@ int tx_callback_qam4(hackrf_transfer* transfer)
 
 		size_t bits_read = file.gcount();
 		HRFTransceiver::make_qam4_buffer(transfer->buffer, read_buffer, bits_read);
+		fwrite(transfer->buffer, sizeof(uint8_t), bits_read, qamLogFile);
 		if (bits_read != bits_to_read)
 		{
 			if (params.repeat)
@@ -138,6 +144,7 @@ int tx_callback_qam4(hackrf_transfer* transfer)
 				file.seekg(0);
 				file.read(read_buffer + bits_read, extra_bits);
 				HRFTransceiver::make_qam4_buffer(transfer->buffer + bits_read * 8, read_buffer + bits_read, extra_bits);
+				fwrite(transfer->buffer, sizeof(uint8_t), bits_read, qamLogFile);
 				return 0;
 			}
 			else
@@ -205,22 +212,22 @@ void HRFTransceiver::make_qam4_buffer(uint8_t* buffer, char* data, size_t size)
 		uint8_t semibyte1, semibyte2, semibyte3, semibyte4;
 
 		semibyte1 = (
-			byte & (1 << 7) +
+			byte & (1 << 7) |
 			byte & (1 << 6)
 		) >> 6;
 
 		semibyte2 = (
-			byte & (1 << 5) +
+			byte & (1 << 5) |
 			byte & (1 << 4)
 		) >> 4;
 
 		semibyte3 = (
-			byte & (1 << 3) +
+			byte & (1 << 3) |
 			byte & (1 << 2)
 		) >> 2;
 
 		semibyte4 = (
-			byte & (1 << 1) +
+			byte & (1 << 1) |
 			byte & (1 << 0)
 		);
 
@@ -283,16 +290,16 @@ void HRFTransceiver::make_qam16_buffer(uint8_t* buffer, char* data, size_t size)
 		//       bits 7-4   bits 3-0
 		uint8_t semibyte1, semibyte2;
 		semibyte1 = (
-				byte & (1 << 7) +
-				byte & (1 << 6) +
-				byte & (1 << 5) +
+				byte & (1 << 7) |
+				byte & (1 << 6) |
+				byte & (1 << 5) |
 				byte & (1 << 4)
 		) >> 4;
 			
 		semibyte2 =
-			byte & (1 << 3) +
-			byte & (1 << 2) +
-			byte & (1 << 1) +
+			byte & (1 << 3) |
+			byte & (1 << 2) |
+			byte & (1 << 1) |
 			byte & (1 << 0);
 		// converting semibytes into Gray code
 		semibyte1 = gray_mapping[semibyte1];

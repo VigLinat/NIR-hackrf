@@ -41,7 +41,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
@@ -148,6 +148,7 @@
     <ClCompile Include="..\GUI\MyApp.cpp" />
     <ClCompile Include="..\hackrf\hackrf.c" />
     <ClCompile Include="..\HRFCmdParser\HRFCmdParser.cpp" />
+    <ClCompile Include="..\Logger\SimpleLogger.cpp" />
     <ClCompile Include="..\SDRDeviceList\HRFDeviceList.cpp" />
     <ClCompile Include="..\SDRDevice\HRFDevice.cpp" />
     <ClCompile Include="..\SDRDevice\SdrDevice.cpp" />
@@ -165,6 +166,7 @@
     <ClInclude Include="..\GUI\MyApp.h" />
     <ClInclude Include="..\hackrf\hackrf.h" />
     <ClInclude Include="..\HRFCmdParser\HRFCmdParser.h" />
+    <ClInclude Include="..\Logger\SimpleLogger.h" />
     <ClInclude Include="..\SDRDeviceList\HRFDeviceList.h" />
     <ClInclude Include="..\SDRDeviceList\SDRDeviceList.h" />
     <ClInclude Include="..\SDRDevice\HRFDevice.h" />

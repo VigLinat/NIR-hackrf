@@ -2,6 +2,7 @@
 #include "SDRTransceiver.h"
 #include "../hackrf/hackrf.h"
 #include <fstream>
+#include "../Logger/SimpleLogger.h"
 
 class HRFTransceiver :
     public SDRTransceiver
